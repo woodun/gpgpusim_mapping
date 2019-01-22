@@ -72,6 +72,7 @@ private:
 
    const char *addrdec_option;
    int gpgpu_mem_address_mask;
+   partition_index_function memory_partition_indexing;////////////////myedit from future
    bool run_test; 
 
    int ADDR_CHIP_S;
