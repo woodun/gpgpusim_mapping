@@ -780,6 +780,7 @@ void gpgpu_sim::deadlock_check()
    if(m_config.gpu_max_insn_opt && max_insn_struck) {
 		print_stats();
 		printf("GPGPU-Sim uArch MAX INSTRUCTIONS STRUCK\n");
+		print_simulation_time();
 		abort();
     }
    ///////////////////////////////////////////////////myedit
