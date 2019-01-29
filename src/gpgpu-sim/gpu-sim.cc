@@ -737,27 +737,6 @@ void gpgpu_sim::print_stats()
     }
 }
 
-/////////////////////////////////////myedit
-void print_simulation_time()
-{
-   time_t current_time, difference, d, h, m, s;
-   current_time = time((time_t *)NULL);
-   difference = MAX(current_time - g_simulation_starttime, 1);
-
-   d = difference/(3600*24);
-   h = difference/3600 - 24*d;
-   m = difference/60 - 60*(h + 24*d);
-   s = difference - 60*(m + 60*(h + 24*d));
-
-   fflush(stderr);
-   printf("\n\ngpgpu_simulation_time = %u days, %u hrs, %u min, %u sec (%u sec)\n",
-          (unsigned)d, (unsigned)h, (unsigned)m, (unsigned)s, (unsigned)difference );
-   printf("gpgpu_simulation_rate = %u (inst/sec)\n", (unsigned)(g_the_gpu->gpu_tot_sim_insn / difference) );
-   printf("gpgpu_simulation_rate = %u (cycle/sec)\n", (unsigned)(gpu_tot_sim_cycle / difference) );
-   fflush(stdout);
-}
-/////////////////////////////////////myedit
-
 void gpgpu_sim::deadlock_check()
 {
    if (m_config.gpu_deadlock_detect && gpu_deadlock) {
@@ -799,10 +778,24 @@ void gpgpu_sim::deadlock_check()
 
    ///////////////////////////////////////////////////myedit
    if(m_config.gpu_max_insn_opt && max_insn_struck) {
-		print_stats();
-		printf("GPGPU-Sim uArch MAX INSTRUCTIONS STRUCK\n");
-		print_simulation_time();
-		abort();
+	   print_stats();
+	   printf("GPGPU-Sim uArch MAX INSTRUCTIONS STRUCK\n");
+	   time_t current_time, difference, d, h, m, s;
+	   current_time = time((time_t *)NULL);
+	   difference = MAX(current_time - g_simulation_starttime, 1);
+
+	   d = difference/(3600*24);
+	   h = difference/3600 - 24*d;
+	   m = difference/60 - 60*(h + 24*d);
+	   s = difference - 60*(m + 60*(h + 24*d));
+
+	   fflush(stderr);
+	   printf("\n\ngpgpu_simulation_time = %u days, %u hrs, %u min, %u sec (%u sec)\n",
+			  (unsigned)d, (unsigned)h, (unsigned)m, (unsigned)s, (unsigned)difference );
+	   printf("gpgpu_simulation_rate = %u (inst/sec)\n", (unsigned)(m_config.gpu_max_insn_opt / difference) );
+	   printf("gpgpu_simulation_rate = %u (cycle/sec)\n", (unsigned)(gpu_tot_sim_cycle / difference) );
+	   fflush(stdout);
+	   abort();
     }
    ///////////////////////////////////////////////////myedit
 }
