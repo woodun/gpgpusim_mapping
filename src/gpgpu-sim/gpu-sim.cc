@@ -778,8 +778,8 @@ void gpgpu_sim::deadlock_check()
 
    ///////////////////////////////////////////////////myedit
    if(m_config.gpu_max_insn_opt && max_insn_struck) {
-	   update_stats();
 	   print_stats();
+	   update_stats();
 	   printf("GPGPU-Sim uArch MAX INSTRUCTIONS STRUCK\n");
 	   time_t current_time, difference, d, h, m, s;
 	   current_time = time((time_t *)NULL);
