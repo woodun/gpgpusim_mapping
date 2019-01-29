@@ -546,6 +546,8 @@ void set_ptx_warp_size(const struct core_config * warp_size);
 gpgpu_sim::gpgpu_sim( const gpgpu_sim_config &config ) 
     : gpgpu_t(config), m_config(config)
 { 
+	max_insn_struck = false;//myedit
+
     m_shader_config = &m_config.m_shader_config;
     m_memory_config = &m_config.m_memory_config;
     set_ptx_warp_size(m_shader_config);
@@ -659,8 +661,8 @@ bool gpgpu_sim::active()
 {
     if (m_config.gpu_max_cycle_opt && (gpu_tot_sim_cycle + gpu_sim_cycle) >= m_config.gpu_max_cycle_opt) 
        return false;
-    if (m_config.gpu_max_insn_opt && (gpu_tot_sim_insn + gpu_sim_insn) >= m_config.gpu_max_insn_opt) 
-       return false;
+    //if (m_config.gpu_max_insn_opt && (gpu_tot_sim_insn + gpu_sim_insn) >= m_config.gpu_max_insn_opt)//myedit
+       //return false;//myedit
     if (m_config.gpu_max_cta_opt && (gpu_tot_issued_cta >= m_config.gpu_max_cta_opt) )
        return false;
     if (m_config.gpu_deadlock_detect && gpu_deadlock) 
@@ -773,6 +775,14 @@ void gpgpu_sim::deadlock_check()
       fflush(stdout);
       abort();
    }
+
+   ///////////////////////////////////////////////////myedit
+   if(m_config.gpu_max_insn_opt && max_insn_struck) {
+		print_stats();
+		printf("GPGPU-Sim uArch MAX INSTRUCTIONS STRUCK\n");
+		abort();
+    }
+   ///////////////////////////////////////////////////myedit
 }
 
 /// printing the names and uids of a set of executed kernels (usually there is only one)
@@ -1157,6 +1167,14 @@ unsigned long long g_single_step=0; // set this in gdb to single step the pipeli
 void gpgpu_sim::cycle()
 {
    int clock_mask = next_clock_domain();
+
+   /////////////////////////////////////myedit
+	if (!(gpu_sim_cycle % 200)) {
+		if (m_config.gpu_max_insn_opt && (gpu_tot_sim_insn + gpu_sim_insn) >= m_config.gpu_max_insn_opt) {
+			max_insn_struck = true;
+		}
+	}
+	/////////////////////////////////////myedit
 
    if (clock_mask & CORE ) {
        // shader core loading (pop from ICNT into core) follows CORE clock

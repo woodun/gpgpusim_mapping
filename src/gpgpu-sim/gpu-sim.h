@@ -457,6 +457,7 @@ private:
 
    // debug
    bool gpu_deadlock;
+   bool max_insn_struck;//myedit
 
    //// configuration parameters ////
    const gpgpu_sim_config &m_config;
