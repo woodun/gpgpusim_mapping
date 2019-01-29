@@ -737,7 +737,7 @@ void gpgpu_sim::print_stats()
     }
 }
 
-#include "gpgpusim_entrypoint.cc"//myedit
+#include "../gpgpusim_entrypoint.cc"//myedit
 
 void gpgpu_sim::deadlock_check()
 {
