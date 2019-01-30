@@ -129,6 +129,9 @@ enum set_index_function{
     CUSTOM_SET_FUNCTION
 };
 
+
+unsigned l1_cacheline_size;//myedit
+
 class cache_config {
 public:
     cache_config() 
@@ -153,6 +156,8 @@ public:
                           &sif,&mshr_type,&m_mshr_entries,&m_mshr_max_merge,
                           &m_miss_queue_size, &m_result_fifo_entries,
                           &m_data_port_width);
+
+        l1_cacheline_size = m_line_sz;//myedit
 
         if ( ntok < 11 ) {
             if ( !strcmp(config,"none") ) {

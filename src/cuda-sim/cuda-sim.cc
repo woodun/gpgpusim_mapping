@@ -815,6 +815,7 @@ static unsigned datatype2size( unsigned data_type )
       default: assert(0); break;
    }
    printf("size: %u\n", data_size);//myedit
+   fflush(stdout);
    return data_size; 
 }
 
