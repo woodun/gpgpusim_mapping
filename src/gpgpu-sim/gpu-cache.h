@@ -130,7 +130,7 @@ enum set_index_function{
 };
 
 
-unsigned l1_cacheline_size;//myedit
+extern unsigned l1_cacheline_size;//myedit
 
 class cache_config {
 public:
