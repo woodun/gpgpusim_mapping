@@ -1526,7 +1526,7 @@ public:
     	m_cluster_id = cluster_id;
     	m_memory_config = config;
     }
-    mem_fetch *alloc( new_addr_type addr, mem_access_type type, unsigned size, bool wr ) const 
+    mem_fetch *alloc( new_addr_type addr, mem_access_type type, unsigned size, bool wr ) const //mymark linesize
     {
     	mem_access_t access( type, addr, size, wr );
     	mem_fetch *mf = new mem_fetch( access, 
@@ -1539,7 +1539,7 @@ public:
     	return mf;
     }
     
-    mem_fetch *alloc( const warp_inst_t &inst, const mem_access_t &access ) const
+    mem_fetch *alloc( const warp_inst_t &inst, const mem_access_t &access ) const //mymark linesize
     {
         warp_inst_t inst_copy = inst;
         mem_fetch *mf = new mem_fetch(access, 
