@@ -76,7 +76,7 @@ public:
 
    const addrdec_t &get_tlx_addr() const { return m_raw_addr; }
    unsigned get_data_size() const { return m_data_size; }
-   void     set_data_size( unsigned size ) { m_data_size=size; }
+   void     set_data_size( unsigned size ) { m_data_size=size; }//mymark linesize
    unsigned get_ctrl_size() const { return m_ctrl_size; }
    unsigned size() const { return m_data_size+m_ctrl_size; }
    bool is_write() {return m_access.is_write();}

@@ -46,7 +46,7 @@
 #include "l2cache_trace.h"
 
 
-mem_fetch * partition_mf_allocator::alloc(new_addr_type addr, mem_access_type type, unsigned size, bool wr ) const 
+mem_fetch * partition_mf_allocator::alloc(new_addr_type addr, mem_access_type type, unsigned size, bool wr ) const //mymark linesize
 {
     assert( wr );
     mem_access_t access( type, addr, size, wr );

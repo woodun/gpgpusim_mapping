@@ -645,7 +645,7 @@ protected:
             m_valid = true;
             m_block_addr = a;
             m_cache_index = i;
-            m_data_size = d;
+            m_data_size = d;//mymark linesize
         }
         bool m_valid;
         new_addr_type m_block_addr;
@@ -1041,7 +1041,7 @@ private:
             m_request=mf;
             m_cache_index=idx;
             m_miss=m;
-            m_data_size=d;
+            m_data_size=d;//mymark linesize
         }
         mem_fetch *m_request;     // request information
         unsigned   m_cache_index; // where to look for data
