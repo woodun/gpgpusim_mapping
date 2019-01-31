@@ -366,6 +366,9 @@ void warp_inst_t::memory_coalescing_arch_13( bool is_write, mem_access_type acce
 //    case 4: case 8: case 16: segment_size = 128; break;
 //    }
     segment_size = l1_cacheline_size;
+    if(l1_cacheline_size > 128){
+    	segment_size = 128;//otherwise not working
+    }
     /////////////////////////////////////////////////////////myedit
     unsigned subwarp_size = m_config->warp_size / warp_parts;
 
