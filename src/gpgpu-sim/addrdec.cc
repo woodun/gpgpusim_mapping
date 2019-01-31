@@ -184,7 +184,7 @@ void linear_to_raw_address_translation::addrdec_tlx(new_addr_type addr, addrdec_
    tlx->sub_partition = tlx->chip * m_n_sub_partition_in_channel
                         + (tlx->bk & sub_partition_addr_mask); 
 }
-
+//-gpgpu_mem_addr_mapping dramid@8;00000000.00000000.00000000.00000000.0000RRRR.RRRRRRRR.BBBCCCCB.CCSSSSSS
 void linear_to_raw_address_translation::addrdec_parseoption(const char *option)
 {
    unsigned int dramid_start = 0;
