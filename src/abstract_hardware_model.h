@@ -561,7 +561,8 @@ private:
    unsigned m_bank; // n in ".const[n]"; note .const == .const[0] (see PTX 2.1 manual, sec. 5.1.3)
 };
 
-const unsigned MAX_MEMORY_ACCESS_SIZE = 128;
+//const unsigned MAX_MEMORY_ACCESS_SIZE = 128;//myedit
+const unsigned MAX_MEMORY_ACCESS_SIZE = 512;//myedit
 typedef std::bitset<MAX_MEMORY_ACCESS_SIZE> mem_access_byte_mask_t;
 #define NO_PARTIAL_WRITE (mem_access_byte_mask_t())
 
