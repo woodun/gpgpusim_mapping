@@ -50,6 +50,11 @@ unsigned int n_at_least_one_channel_active = 0;
 unsigned int n_clc = 0;
 unsigned int n_pending_all = 0;
 unsigned int n_at_least_one_channel_pending = 0;
+
+
+unsigned int n_activity_all = 0;
+unsigned int bwutil_all = 0;
+unsigned int n_cmd_all = 0;
 ///////////////////////////////myedit
 
 template class fifo_pipeline<mem_fetch>;
@@ -312,6 +317,9 @@ void dram_t::cycle()
             n_rd++;
             bwutil += m_config->BL/m_config->data_command_freq_ratio;
             bwutil_partial += m_config->BL/m_config->data_command_freq_ratio;
+
+            bwutil_all += m_config->BL/m_config->data_command_freq_ratio;//myedit
+
             bk[j]->n_access++;
 #ifdef DRAM_VERIFY
             PRINT_CYCLE=1;
@@ -346,6 +354,9 @@ void dram_t::cycle()
             n_wr++;
             bwutil += m_config->BL/m_config->data_command_freq_ratio;
             bwutil_partial += m_config->BL/m_config->data_command_freq_ratio;
+
+            bwutil_all += m_config->BL/m_config->data_command_freq_ratio;//myedit
+
 #ifdef DRAM_VERIFY
             PRINT_CYCLE=1;
             printf("\tWR  Bk:%d Row:%03x Col:%03x \n",
@@ -418,9 +429,11 @@ void dram_t::cycle()
    if (k) {
       n_activity++;
       n_activity_partial++;
+      n_activity_all++;//myedit
    }
    n_cmd++;
    n_cmd_partial++;
+   n_cmd_all++;
 
    /////////////////////////////////////////////////myedit
    n_blp += n_serving;
@@ -532,6 +545,23 @@ void dram_t::print( FILE* simFile) const
 		   id, (float)n_blc/n_pending);
 
    if(id == m_config->m_n_mem - 1){//the last channel
+
+	   fprintf(simFile,"n_cmd_all=%u\n",
+	   	           n_cmd_all);
+	   fprintf(simFile,"n_activity_all=%u\n",
+	           n_activity_all);
+	   fprintf(simFile,"r_active_all=%.4g\n",
+	           (float)n_activity_all/n_cmd_all);
+	   fprintf(simFile,"n_waste_all=%u\n",
+	           n_activity_all - bwutil_all);
+	   fprintf(simFile,"r_waste_all=%.4g\n",
+	           (float)(n_activity_all - bwutil_all)/n_cmd_all);
+	   fprintf(simFile,"n_idle_all=%u\n",
+			   n_cmd_all - n_activity_all);
+	   fprintf(simFile,"r_idle_all=%.4g\n",
+	           1 - (float)n_activity_all/n_cmd_all);
+	   fprintf(simFile,"dram_eff_all=%.4g\n",
+	           (float)bwutil_all/n_activity_all);
 
 	   ////////////blp & blc
 	   fprintf(simFile,"n_blp_all=%u\n",
