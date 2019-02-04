@@ -89,20 +89,6 @@ struct bank_t
 
 struct mem_fetch;
 
-///////////////////////////////myedit
-unsigned int n_serving_all = 0;
-unsigned int num_pending_all = 0;
-unsigned int n_channel_active_per_cycle = 0;
-
-unsigned int n_channel_active_all = 0;// aka clp
-unsigned int n_blp_all = 0;
-unsigned int n_blc_all = 0;
-unsigned int n_at_least_one_channel_active = 0;
-unsigned int n_clc = 0;
-unsigned int n_pending_all;
-unsigned int n_at_least_one_channel_pending = 0;
-///////////////////////////////myedit
-
 class dram_t 
 {
 public:
