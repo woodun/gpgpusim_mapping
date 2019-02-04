@@ -92,6 +92,7 @@ struct mem_fetch;
 ///////////////////////////////myedit
 unsigned int n_serving_all = 0;
 unsigned int num_pending_all = 0;
+unsigned int n_channel_active_per_cycle = 0;
 
 unsigned int n_channel_active_all = 0;// aka clp
 unsigned int n_blp_all = 0;
