@@ -289,6 +289,7 @@ void memory_stats_t::memlatstat_print( unsigned n_mem, unsigned gpu_mem_n_bk )
          printf("\n");
       }
       printf("average row locality = %d/%d = %f\n", total_row_accesses, total_num_activates, (float)total_row_accesses/total_num_activates);
+      printf("average rbl = %f\n", (float)total_row_accesses/total_num_activates);//myedit
       /*MEMORY ACCESSES*/
       k = 0;
       l = 0;

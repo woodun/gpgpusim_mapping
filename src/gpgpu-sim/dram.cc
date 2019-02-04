@@ -94,6 +94,12 @@ dram_t::dram_t( unsigned int partition_id, const struct memory_config *config, m
    max_mrqs = 0;
    ave_mrqs = 0;
 
+   ///////////////////////////////myedit
+   n_channel_active = 0;
+   n_blp = 0;
+   n_blc = 0;
+   ///////////////////////////////myedit
+
    for (unsigned i=0;i<10;i++) {
       dram_util_bins[i]=0;
       dram_eff_bins[i]=0;
@@ -258,11 +264,17 @@ void dram_t::cycle()
    unsigned k=m_config->nbk;
    bool issued = false;
 
+   unsigned n_serving = 0;//myedit
+
    // check if any bank is ready to issue a new read
    for (unsigned i=0;i<m_config->nbk;i++) {
       unsigned j = (i + prio) % m_config->nbk;
 	  unsigned grp = j>>m_config->bk_tag_length;
       if (bk[j]->mrq) { //if currently servicing a memory request
+
+    	  n_serving++;//myedit
+    	  n_serving_all++;//myedit
+
           bk[j]->mrq->data->set_status(IN_PARTITION_DRAM,gpu_sim_cycle+gpu_tot_sim_cycle);
          // correct row activated for a READ
          if ( !issued && !CCDc && !bk[j]->RCDc &&
@@ -396,6 +408,35 @@ void dram_t::cycle()
    n_cmd++;
    n_cmd_partial++;
 
+   /////////////////////////////////////////////////myedit
+   n_blp += n_serving;
+   if(n_serving != 0){
+	   n_channel_active++;
+	   n_channel_active_all++;
+	   n_channel_active_per_cycle++;
+   }
+   if(m_frfcfs_scheduler->num_pending() != 0){
+	   n_blc += n_serving;
+	   n_blc_all += n_serving;
+	   num_pending_all++;
+	   n_pending++;
+   }
+   if(id == m_config->m_n_mem - 1){//the last channel
+	   n_blp_all += n_serving_all;
+	   if(n_serving_all != 0){
+		   n_at_least_one_channel_active++;
+	   }
+	   if(num_pending_all != 0){
+		   n_clc += n_channel_active_per_cycle;
+		   n_pending_all += num_pending_all;
+		   n_at_least_one_channel_pending++;
+	   }
+	   n_serving_all = 0;
+	   num_pending_all = 0;
+	   n_channel_active_per_cycle = 0;
+   }
+   /////////////////////////////////////////////////myedit
+
    // decrements counters once for each time dram_issueCMD is called
    DEC2ZERO(RRDc);
    DEC2ZERO(CCDc);
@@ -443,6 +484,85 @@ void dram_t::print( FILE* simFile) const
            (float)bwutil/n_cmd);
    fprintf(simFile,"n_activity=%d dram_eff=%.4g\n",
            n_activity, (float)bwutil/n_activity);
+
+   /////////////////////////////////////////////////////////myedit
+   fprintf(simFile,"r_active=%.4g\n",
+           (float)n_activity/n_cmd);
+   fprintf(simFile,"n_waste=%u\n",
+           n_activity - bwutil);
+   fprintf(simFile,"r_waste=%.4g\n",
+           (float)(n_activity - bwutil)/n_cmd);
+   fprintf(simFile,"n_idle=%u\n",
+		   n_cmd - n_activity);
+   fprintf(simFile,"r_idle=%.4g\n",
+           1 - (float)n_activity/n_cmd);
+
+   ////////////blp & blc
+   fprintf(simFile,"n_blp%u=%u\n",
+           id, n_blp);
+   fprintf(simFile,"r_blp%u=%.4g\n",
+		   id, (float)n_blp/n_cmd);
+   fprintf(simFile,"n_channel_active%u=%u\n",
+		   id, n_channel_active);
+   fprintf(simFile,"r_eblp%u=%.4g\n",
+		   id, (float)n_blp/n_channel_active);
+   fprintf(simFile,"n_blc%u=%u\n",
+           id, n_blc);
+   fprintf(simFile,"r_blc%u=%.4g\n",
+		   id, (float)n_blc/n_cmd);
+   fprintf(simFile,"r_eblc%u=%.4g\n",
+		   id, (float)n_blc/n_channel_active);
+   fprintf(simFile,"n_pending%u=%u\n",
+		   id, n_pending);
+   fprintf(simFile,"r_rblc%u=%.4g\n",
+		   id, (float)n_blc/n_pending);
+
+   if(id == m_config->m_n_mem - 1){//the last channel
+
+	   ////////////blp & blc
+	   fprintf(simFile,"n_blp_all=%u\n",
+	           n_blp_all);
+	   fprintf(simFile,"r_blp_all=%.4g\n",
+			   (float)n_blp_all/n_cmd/m_config->m_n_mem);
+	   fprintf(simFile,"n_channel_active_all=%u\n",
+			   n_channel_active_all);
+	   fprintf(simFile,"r_eblp_all=%.4g\n",
+			   (float)n_blp_all/n_channel_active_all);
+
+	   fprintf(simFile,"n_blc_all=%u\n",
+	           n_blc_all);
+	   fprintf(simFile,"r_blc_all=%.4g\n",
+			   (float)n_blc_all/n_cmd/m_config->m_n_mem);
+	   fprintf(simFile,"r_eblc_all=%.4g\n",
+			   (float)n_blc_all/n_channel_active_all);
+	   fprintf(simFile,"n_pending_all=%u\n",
+			   n_pending_all);
+	   fprintf(simFile,"r_rblc_all=%.4g\n",
+			   (float)n_blc_all/n_pending_all);
+
+	   ////////////clp & clc
+	   fprintf(simFile,"n_clp=%u\n",
+			   n_channel_active_all);
+	   fprintf(simFile,"r_clp=%.4g\n",
+			   (float)n_channel_active_all/n_cmd);
+	   fprintf(simFile,"n_at_least_one_channel_active=%u\n",
+			   n_at_least_one_channel_active);
+	   fprintf(simFile,"r_eclp=%.4g\n",
+			   (float)n_channel_active_all/n_at_least_one_channel_active);
+
+	   fprintf(simFile,"n_clc=%u\n",
+			   n_clc);
+	   fprintf(simFile,"r_clc=%.4g\n",
+	   			   (float)n_clc/n_cmd);
+	   fprintf(simFile,"r_eclc=%.4g\n",
+	   			   (float)n_clc/n_at_least_one_channel_active);
+	   fprintf(simFile,"n_at_least_one_channel_pending=%u\n",
+			   n_at_least_one_channel_pending);
+	   fprintf(simFile,"r_rclc=%.4g\n",
+			   (float)n_clc/n_at_least_one_channel_pending);
+   }
+   /////////////////////////////////////////////////////////myedit
+
    for (i=0;i<m_config->nbk;i++) {
       fprintf(simFile, "bk%d: %da %di ",i,bk[i]->n_access,bk[i]->n_idle);
    }
