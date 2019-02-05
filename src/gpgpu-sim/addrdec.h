@@ -41,7 +41,15 @@ enum partition_index_function{
 	BITWISE_PERMUTATION,
 	IPOLY,
 	PAE,
-    CUSTOM
+    CUSTOM4,
+	CUSTOM5,
+	CUSTOM6,
+	CUSTOM7,
+	CUSTOM8,
+	CUSTOM9,
+	CUSTOM10,
+	CUSTOM11,
+	CUSTOM12
 };
 ////////////////myedit from future
 

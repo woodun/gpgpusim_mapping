@@ -196,10 +196,49 @@ void linear_to_raw_address_translation::addrdec_tlx(new_addr_type addr, addrdec_
 			assert(tlx->chip < m_n_channel);
 			break;
 		}
-		case CUSTOM:
-			/* No custom set function implemented */
-			//Do you custom index here
-			break;
+		case CUSTOM4:
+			{
+				std::bitset<64> a(tlx->row);
+				std::bitset<4> b(tlx->bk);
+				b[0] = a[13]^a[12]^a[11]^a[10]^a[9]^a[6]^a[5]^a[3]^a[0]^b[0];
+				b[1] = a[14]^a[13]^a[12]^a[11]^a[10]^a[7]^a[6]^a[4]^a[1]^b[1];
+				b[2] = a[14]^a[10]^a[9]^a[8]^a[7]^a[6]^a[3]^a[2]^a[0]^b[2];
+				b[3] = a[11]^a[10]^a[9]^a[8]^a[7]^a[4]^a[3]^a[1]^b[3];
+				tlx->bk = b.to_ulong();
+				break;
+			}
+		case CUSTOM5:
+			{
+				break;
+			}
+		case CUSTOM6:
+			{
+				break;
+			}
+		case CUSTOM7:
+			{
+				break;
+			}
+		case CUSTOM8:
+			{
+				break;
+			}
+		case CUSTOM9:
+			{
+				break;
+			}
+		case CUSTOM10:
+			{
+				break;
+			}
+		case CUSTOM11:
+			{
+				break;
+			}
+		case CUSTOM12:
+			{
+				break;
+			}
 		default:
 			 assert("\nUndefined set index function.\n" && 0);
 			 break;
