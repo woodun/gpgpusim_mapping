@@ -226,10 +226,23 @@ void linear_to_raw_address_translation::addrdec_tlx(new_addr_type addr, addrdec_
 			}
 		case CUSTOM6:
 			{
+				std::bitset<64> a(tlx->row);
+				std::bitset<5> chip(tlx->chip);
+				chip[0] = a[10]^a[9]^a[8]^a[6]^a[5]^a[2]^a[0]^chip[0];
+				chip[1] = a[10]^a[9]^a[6]^a[5]^a[4]^a[1]^chip[1];
+				chip[2] = a[9]^a[8]^a[7]^a[6]^a[5]^a[2]^a[1]^a[0]^chip[2];
+				tlx->chip = chip.to_ulong();
 				break;
 			}
 		case CUSTOM7:
 			{
+				std::bitset<64> a(tlx->row);
+				std::bitset<5> chip(tlx->chip);
+				std::bitset<4> b(tlx->bk);
+				chip[0] = a[11]^a[10]^a[6]^a[1]^b[0]^b[1]^chip[0];
+				chip[1] = a[10]^a[5]^a[0]^b[3]^b[1]^chip[1];
+				chip[2] = a[10]^a[9]^a[8]^a[3]^b[2]^chip[2];
+				tlx->chip = chip.to_ulong();
 				break;
 			}
 		case CUSTOM8:
