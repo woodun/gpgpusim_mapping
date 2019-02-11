@@ -124,10 +124,10 @@ void get_app_name(){
 		std::string filename3 = "/sciclone/pscr/hwang07/mapping_results/l1_miss_count/" + app_name + ".txt";
 		std::string filename4 = "/sciclone/pscr/hwang07/mapping_results/l2_miss_count/" + app_name + ".txt";
 
-		std::FILE * outfile1 = std::fopen(filename1.c_str(), "w");
-		std::FILE * outfile2 = std::fopen(filename2.c_str(), "w");
-		std::FILE * outfile3 = std::fopen(filename3.c_str(), "w");
-		std::FILE * outfile4 = std::fopen(filename4.c_str(), "w");
+		outfile1 = std::fopen(filename1.c_str(), "w");
+		outfile2 = std::fopen(filename2.c_str(), "w");
+		outfile3 = std::fopen(filename3.c_str(), "w");
+		outfile4 = std::fopen(filename4.c_str(), "w");
 }
 //////////////////////////myedit
 
