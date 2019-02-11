@@ -1292,8 +1292,8 @@ void gpgpu_sim::cycle()
     		  l2_window_counter[i] = 0;
     	  }
 
-    	  fprintf(outfile3, "\n", l1_window_counter[i]);
-    	  fprintf(outfile4, "\n", l1_window_counter[i]);
+    	  fprintf(outfile3, "\n");
+    	  fprintf(outfile4, "\n");
       }
       ////////////////////////////////myedit
 
