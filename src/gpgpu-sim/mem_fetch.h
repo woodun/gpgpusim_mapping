@@ -124,7 +124,7 @@ public:
    unsigned get_channel_id() const { return m_raw_addr.chip; }
 
    unsigned get_cta_id(){
-	   return m_inst->get_cta_id();
+	   return m_inst.get_cta_id();
    }
 
    void print_status1(unsigned long long cycle )
