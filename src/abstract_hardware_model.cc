@@ -128,6 +128,7 @@ void get_app_name(){
 		outfile2 = std::fopen(filename2.c_str(), "w");
 		outfile3 = std::fopen(filename3.c_str(), "w");
 		outfile4 = std::fopen(filename4.c_str(), "w");
+	}
 }
 //////////////////////////myedit
 
