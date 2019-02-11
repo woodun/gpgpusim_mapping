@@ -1283,12 +1283,12 @@ void gpgpu_sim::cycle()
       gpu_sim_cycle++;
 
       ////////////////////////////////myedit
-      if((gpu_sim_cycle+gpu_tot_sim_cycle) % 4000 == 0){
+      if((gpu_sim_cycle+gpu_tot_sim_cycle) % 4096 == 0){
 
     	  for(unsigned i = 0; i < 8; ++i){
-    		  fprintf(outfile3, "%u ", l1_window_counter[i]);
+    		  fprintf(outfile3, "%4u ", l1_window_counter[i]);
     		  l1_window_counter[i] = 0;
-    		  fprintf(outfile4, "%u ", l2_window_counter[i]);
+    		  fprintf(outfile4, "%4u ", l2_window_counter[i]);
     		  l2_window_counter[i] = 0;
     	  }
 
