@@ -582,7 +582,12 @@ void shader_core_ctx::decode()
             }else if(pI1->oprnd_type==FP_OP) {
             	m_stats->m_num_FPdecoded_insn[m_sid]++;
             }
-           const warp_inst_t* pI2 = ptx_fetch_inst(pc+pI1->isize);
+
+            ///////////////////myedit
+           //const warp_inst_t* pI2 = ptx_fetch_inst(pc+pI1->isize);
+           warp_inst_t* pI2 = ptx_fetch_inst(pc+pI1->isize);
+           ///////////////////myedit
+
            if( pI2 ) {
                m_warp[m_inst_fetch_buffer.m_warp_id].ibuffer_fill(1,pI2);
                m_warp[m_inst_fetch_buffer.m_warp_id].inc_inst_in_pipeline();
