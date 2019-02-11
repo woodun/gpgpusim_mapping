@@ -1389,7 +1389,8 @@ const struct gpgpu_ptx_sim_kernel_info* ptx_sim_kernel_info(const function_info 
    return kernel->get_kernel_info();
 }
 
-const warp_inst_t *ptx_fetch_inst( address_type pc )
+//const warp_inst_t *ptx_fetch_inst( address_type pc )////////////myedit
+warp_inst_t *ptx_fetch_inst( address_type pc )////////////myedit
 {
     return function_info::pc_to_instruction(pc);
 }
