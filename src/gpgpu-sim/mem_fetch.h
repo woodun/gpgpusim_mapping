@@ -127,12 +127,12 @@ public:
 	   return m_inst->get_cta_id();
    }
 
-   void mem_fetch::print_status1(unsigned long long cycle )
+   void print_status1(unsigned long long cycle )
    {
 	   fprintf(outfile1, "%llu, %u, %u, %u, %u, %u, %u, %llu\n", cycle, get_cta_id(), m_sid, m_wid, m_raw_addr.chip, m_raw_addr.bank, m_raw_addr.row, access.get_addr());
    }
 
-   void mem_fetch::print_status2(unsigned long long cycle )
+   void print_status2(unsigned long long cycle )
    {
 	   fprintf(outfile2, "%llu, %u, %u, %u, %u, %u, %u, %llu\n", cycle, get_cta_id(), m_sid, m_wid, m_raw_addr.chip, m_raw_addr.bank, m_raw_addr.row, access.get_addr());
    }

@@ -970,7 +970,7 @@ public:
     	return cta_id;
     }
 
-    unsigned set_cta_id(unsigned cta_id_input){
+    void set_cta_id(unsigned cta_id_input){
     	cta_id = cta_id_input;
     }
     ////////////////////////////myedit
