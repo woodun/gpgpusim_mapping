@@ -159,7 +159,8 @@ public:
     void store_info_of_last_inst_at_barrier(const warp_inst_t *pI){ m_inst_at_barrier = pI;}
     const warp_inst_t * restore_info_of_last_inst_at_barrier(){ return m_inst_at_barrier;}
 
-    void ibuffer_fill( unsigned slot, const warp_inst_t *pI )
+    //void ibuffer_fill( unsigned slot, const warp_inst_t *pI )
+    void ibuffer_fill( unsigned slot, warp_inst_t *pI )
     {
        assert(slot < IBUFFER_SIZE );
        m_ibuffer[slot].m_inst=pI;
