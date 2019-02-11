@@ -965,6 +965,15 @@ public:
     void print( FILE *fout ) const;
     unsigned get_uid() const { return m_uid; }
 
+    ////////////////////////////myedit
+    unsigned get_cta_id(){
+    	return cta_id;
+    }
+
+    unsigned set_cta_id(unsigned cta_id_input){
+    	cta_id = cta_id_input;
+    }
+    ////////////////////////////myedit
 
 protected:
 
@@ -995,6 +1004,8 @@ protected:
     std::list<mem_access_t> m_accessq;
 
     static unsigned sm_next_uid;
+
+    unsigned cta_id;//////myedit
 };
 
 void move_warp( warp_inst_t *&dst, warp_inst_t *&src );

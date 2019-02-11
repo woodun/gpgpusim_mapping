@@ -89,9 +89,56 @@ void gpgpu_functional_sim_config::ptx_set_tex_cache_linesize(unsigned linesize)
    m_texcache_linesize = linesize;
 }
 
+//////////////////////////myedit
+unsigned app_init = 0;
+std::string app_name = "test";
+std::string benchmark = "test";
+
+std::FILE * outfile1;
+std::FILE * outfile2;
+std::FILE * outfile3;
+std::FILE * outfile4;
+
+void get_app_name(){
+	char cwd[1024];
+
+	if (getcwd(cwd, sizeof(cwd)) != NULL) {
+		std::string working_folder = std::string(cwd);
+		std::size_t found = working_folder.find_last_of('/');
+		app_name = working_folder.substr(found + 1);
+		benchmark = app_name;
+
+		std::string set_name = working_folder.substr(0, found);
+		found = set_name.find_last_of('/');
+		set_name = set_name.substr(found + 1);
+
+		std::string config_name = working_folder.substr(0, found);
+		found = config_name.find_last_of('/');
+		config_name = config_name.substr(found + 1);
+
+		app_name = set_name + "_" + app_name;
+		app_name = config_name + "_" + app_name;
+
+		std::string filename1 = "/sciclone/pscr/hwang07/mapping_results/l1_miss_trace/" + app_name + ".txt";
+		std::string filename2 = "/sciclone/pscr/hwang07/mapping_results/l2_miss_trace/" + app_name + ".txt";
+		std::string filename3 = "/sciclone/pscr/hwang07/mapping_results/l1_miss_count/" + app_name + ".txt";
+		std::string filename4 = "/sciclone/pscr/hwang07/mapping_results/l2_miss_count/" + app_name + ".txt";
+
+		std::FILE * outfile1 = std::fopen(filename1.c_str(), "w");
+		std::FILE * outfile2 = std::fopen(filename2.c_str(), "w");
+		std::FILE * outfile3 = std::fopen(filename3.c_str(), "w");
+		std::FILE * outfile4 = std::fopen(filename4.c_str(), "w");
+}
+//////////////////////////myedit
+
 gpgpu_t::gpgpu_t( const gpgpu_functional_sim_config &config )
     : m_function_model_config(config)
 {
+	if(app_init == 0){
+		app_init = 1;
+		get_app_name();/////////////////myedit
+	}
+
    m_global_mem = new memory_space_impl<8192>("global",64*1024);
    m_tex_mem = new memory_space_impl<8192>("tex",64*1024);
    m_surf_mem = new memory_space_impl<8192>("surf",64*1024);

@@ -47,6 +47,13 @@ enum mf_type {
 #undef MF_TUP
 #undef MF_TUP_END
 
+//////////////////////////myedit
+extern std::string app_name;
+extern std::string benchmark;
+extern std::FILE * outfile1;
+extern std::FILE * outfile2;
+//////////////////////////myedit
+
 class mem_fetch {
 public:
     mem_fetch( const mem_access_t &access, 
@@ -59,6 +66,7 @@ public:
    ~mem_fetch();
 
    void set_status( enum mem_fetch_status status, unsigned long long cycle );
+
    void set_reply() 
    { 
        assert( m_access.get_type() != L1_WRBK_ACC && m_access.get_type() != L2_WRBK_ACC );
@@ -111,6 +119,25 @@ public:
    const memory_config *get_mem_config(){return m_mem_config;}
 
    unsigned get_num_flits(bool simt_to_mem);
+
+   //////////////////////////////////myedit
+   unsigned get_channel_id() const { return m_raw_addr.chip; }
+
+   unsigned get_cta_id(){
+	   return m_inst->get_cta_id();
+   }
+
+   void mem_fetch::print_status1(unsigned long long cycle )
+   {
+	   fprintf(outfile1, "%llu, %u, %u, %u, %u, %u, %u, %llu\n", cycle, get_cta_id(), m_sid, m_wid, m_raw_addr.chip, m_raw_addr.bank, m_raw_addr.row, access.get_addr());
+   }
+
+   void mem_fetch::print_status2(unsigned long long cycle )
+   {
+	   fprintf(outfile2, "%llu, %u, %u, %u, %u, %u, %u, %llu\n", cycle, get_cta_id(), m_sid, m_wid, m_raw_addr.chip, m_raw_addr.bank, m_raw_addr.row, access.get_addr());
+   }
+   //////////////////////////////////myedit
+
 private:
    // request source information
    unsigned m_request_uid;

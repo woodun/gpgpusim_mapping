@@ -165,6 +165,9 @@ public:
        m_ibuffer[slot].m_inst=pI;
        m_ibuffer[slot].m_valid=true;
        m_next=0; 
+       ///////////////////myedit
+       pI->set_cta_id(m_cta_id);
+       ///////////////////myedit
     }
     bool ibuffer_empty() const
     {

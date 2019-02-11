@@ -82,7 +82,6 @@ bool g_interactive_debugger_enabled=false;
 unsigned long long  gpu_sim_cycle = 0;
 unsigned long long  gpu_tot_sim_cycle = 0;
 
-
 // performance counter for stalls due to congestion.
 unsigned int gpu_stall_dramfull = 0; 
 unsigned int gpu_stall_icnt2sh = 0;
@@ -1180,6 +1179,14 @@ void gpgpu_sim::issue_block2core()
 
 unsigned long long g_single_step=0; // set this in gdb to single step the pipeline
 
+///////////////////myedit
+extern unsigned l1_window_counter[8];
+extern unsigned l2_window_counter[8];
+extern std::FILE * outfile3;
+extern std::FILE * outfile4;
+//////////////////////////myedit
+///////////////////myedit
+
 void gpgpu_sim::cycle()
 {
    int clock_mask = next_clock_domain();
@@ -1274,6 +1281,22 @@ void gpgpu_sim::cycle()
           asm("int $03");
       }
       gpu_sim_cycle++;
+
+      ////////////////////////////////myedit
+      if((gpu_sim_cycle+gpu_tot_sim_cycle) % 4000 == 0){
+
+    	  for(unsigned i = 0; i < 8; ++i){
+    		  fprintf(outfile3, "%u ", l1_window_counter[i]);
+    		  l1_window_counter[i] = 0;
+    		  fprintf(outfile4, "%u ", l2_window_counter[i]);
+    		  l2_window_counter[i] = 0;
+    	  }
+
+    	  fprintf(outfile3, "\n", l1_window_counter[i]);
+    	  fprintf(outfile4, "\n", l1_window_counter[i]);
+      }
+      ////////////////////////////////myedit
+
       if( g_interactive_debugger_enabled ) 
          gpgpu_debug();
 

@@ -3264,6 +3264,10 @@ bool simt_core_cluster::icnt_injection_buffer_full(unsigned size, bool write)
     return ! ::icnt_has_buffer(m_cluster_id, request_size);
 }
 
+////////////////myedit
+unsigned l1_window_counter[8];
+////////////////myedit
+
 void simt_core_cluster::icnt_inject_request_packet(class mem_fetch *mf)
 {
     // stats
@@ -3294,6 +3298,12 @@ void simt_core_cluster::icnt_inject_request_packet(class mem_fetch *mf)
    m_stats->m_outgoing_traffic_stats->record_traffic(mf, packet_size); 
    unsigned destination = mf->get_sub_partition_id();
    mf->set_status(IN_ICNT_TO_MEM,gpu_sim_cycle+gpu_tot_sim_cycle);
+
+   ////////////////myedit
+   mf->print_status1(gpu_sim_cycle + gpu_tot_sim_cycle);
+   l1_window_counter[mf->get_channel_id()]++;
+   ////////////////myedit
+
    if (!mf->get_is_write() && !mf->isatomic())
       ::icnt_push(m_cluster_id, m_config->mem2device(destination), (void*)mf, mf->get_ctrl_size() );
    else 
