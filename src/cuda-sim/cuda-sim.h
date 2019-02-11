@@ -72,7 +72,12 @@ unsigned ptx_sim_init_thread( kernel_info_t &kernel,
                               unsigned hw_warp_id,
                               gpgpu_t *gpu,
                               bool functionalSimulationMode = false);
-const warp_inst_t *ptx_fetch_inst( address_type pc );
+
+////////////////////////myedit
+//const warp_inst_t *ptx_fetch_inst( address_type pc );
+warp_inst_t *ptx_fetch_inst( address_type pc );
+////////////////////////myedit
+
 const struct gpgpu_ptx_sim_kernel_info* ptx_sim_kernel_info(const class function_info *kernel);
 void ptx_print_insn( address_type pc, FILE *fp );
 std::string ptx_get_insn_str( address_type pc );

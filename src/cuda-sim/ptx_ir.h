@@ -1244,7 +1244,8 @@ public:
       return m_symtab;
    }
 
-   static const ptx_instruction* pc_to_instruction(unsigned pc) 
+   //static const ptx_instruction* pc_to_instruction(unsigned pc) ////////////myedit
+   static ptx_instruction* pc_to_instruction(unsigned pc) ////////////myedit
    {
       if( pc < s_g_pc_to_insn.size() )
           return s_g_pc_to_insn[pc];
