@@ -64,8 +64,8 @@ void frfcfs_scheduler::add_req( dram_req_t *req )
    m_bins[req->bk][req->row].push_front( ptr ); //newest reqs to the front
 
    ////////////////myedit
-   mf->print_status2(gpu_sim_cycle + gpu_tot_sim_cycle);
-   l2_window_counter[mf->get_channel_id()]++;
+   req->data->print_status2(gpu_sim_cycle + gpu_tot_sim_cycle);
+   l2_window_counter[req->data->get_channel_id()]++;
    ////////////////myedit
 }
 
