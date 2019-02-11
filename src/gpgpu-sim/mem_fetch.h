@@ -129,12 +129,12 @@ public:
 
    void print_status1(unsigned long long cycle )
    {
-	   fprintf(outfile1, "%llu, %u, %u, %u, %u, %u, %u, %llu\n", cycle, get_cta_id(), m_sid, m_wid, m_raw_addr.chip, m_raw_addr.bank, m_raw_addr.row, access.get_addr());
+	   fprintf(outfile1, "%llu, %u, %u, %u, %u, %u, %u, %llu\n", cycle, get_cta_id(), m_sid, m_wid, m_raw_addr.chip, m_raw_addr.bk, m_raw_addr.row, access.get_addr());
    }
 
    void print_status2(unsigned long long cycle )
    {
-	   fprintf(outfile2, "%llu, %u, %u, %u, %u, %u, %u, %llu\n", cycle, get_cta_id(), m_sid, m_wid, m_raw_addr.chip, m_raw_addr.bank, m_raw_addr.row, access.get_addr());
+	   fprintf(outfile2, "%llu, %u, %u, %u, %u, %u, %u, %llu\n", cycle, get_cta_id(), m_sid, m_wid, m_raw_addr.chip, m_raw_addr.bk, m_raw_addr.row, access.get_addr());
    }
    //////////////////////////////////myedit
 
