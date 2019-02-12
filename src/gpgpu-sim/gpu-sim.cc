@@ -1185,8 +1185,8 @@ void gpgpu_sim::issue_block2core()
 unsigned long long g_single_step=0; // set this in gdb to single step the pipeline
 
 ///////////////////myedit
-extern unsigned l1_window_counter[8];
-extern unsigned l2_window_counter[8];
+extern unsigned l1_window_counter[32];
+extern unsigned l2_window_counter[32];
 extern std::FILE * outfile3;
 extern std::FILE * outfile4;
 //////////////////////////myedit
@@ -1290,7 +1290,7 @@ void gpgpu_sim::cycle()
       ////////////////////////////////myedit
       if((gpu_sim_cycle+gpu_tot_sim_cycle) % 4096 == 0){
 
-    	  for(unsigned i = 0; i < 8; ++i){
+    	  for(unsigned i = 0; i < m_memory_config->m_n_mem; ++i){
     		  fprintf(outfile3, "%4u ", l1_window_counter[i]);
     		  l1_window_counter[i] = 0;
     		  fprintf(outfile4, "%4u ", l2_window_counter[i]);

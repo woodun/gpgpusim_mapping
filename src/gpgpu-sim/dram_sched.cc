@@ -53,7 +53,7 @@ frfcfs_scheduler::frfcfs_scheduler( const memory_config *config, dram_t *dm, mem
 }
 
 ////////////////myedit
-unsigned l2_window_counter[8];
+unsigned l2_window_counter[32];
 ////////////////myedit
 
 void frfcfs_scheduler::add_req( dram_req_t *req )

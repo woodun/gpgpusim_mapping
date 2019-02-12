@@ -3275,7 +3275,7 @@ bool simt_core_cluster::icnt_injection_buffer_full(unsigned size, bool write)
 }
 
 ////////////////myedit
-unsigned l1_window_counter[8];
+unsigned l1_window_counter[32];
 ////////////////myedit
 
 void simt_core_cluster::icnt_inject_request_packet(class mem_fetch *mf)
