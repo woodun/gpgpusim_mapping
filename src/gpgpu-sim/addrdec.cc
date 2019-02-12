@@ -188,22 +188,15 @@ void linear_to_raw_address_translation::addrdec_tlx(new_addr_type addr, addrdec_
 			std::bitset<64> a(tlx->row);
 			std::bitset<5> chip(tlx->chip);
 			std::bitset<5> b(tlx->bk);
-			if(m_n_channel == 8){
+			if(m_n_channel >= 8){
 				chip[0] = a[13]^a[10]^a[9]^a[5]^a[0]^b[3]^b[0]^chip[0];
 				chip[1] = a[12]^a[11]^a[6]^a[1]^b[3]^b[2]^b[1]^chip[1];
 				chip[2] = a[14]^a[9]^a[8]^a[7]^a[2]^b[1]^chip[2];
 			}
-			if(m_n_channel == 16){
-				chip[0] = a[13]^a[10]^a[9]^a[5]^a[0]^b[3]^b[0]^chip[0];
-				chip[1] = a[12]^a[11]^a[6]^a[1]^b[3]^b[2]^b[1]^chip[1];
-				chip[2] = a[14]^a[9]^a[8]^a[7]^a[2]^b[1]^chip[2];
+			if(m_n_channel >= 16){
 				chip[3] = a[11]^a[10]^a[8]^a[3]^b[2]^b[3]^chip[3];
 			}
-			if(m_n_channel == 32){
-				chip[0] = a[13]^a[10]^a[9]^a[5]^a[0]^b[3]^b[0]^chip[0];
-				chip[1] = a[12]^a[11]^a[6]^a[1]^b[3]^b[2]^b[1]^chip[1];
-				chip[2] = a[14]^a[9]^a[8]^a[7]^a[2]^b[1]^chip[2];
-				chip[3] = a[11]^a[10]^a[8]^a[3]^b[2]^b[3]^chip[3];
+			if(m_n_channel >= 32){
 				chip[4] = a[12]^a[9]^a[8]^a[5]^a[4]^b[1]^b[0]^chip[4];
 			}
 			tlx->chip = chip.to_ulong();
