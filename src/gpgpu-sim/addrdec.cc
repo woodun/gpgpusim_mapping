@@ -169,7 +169,7 @@ void linear_to_raw_address_translation::addrdec_tlx(new_addr_type addr, addrdec_
 		}
 		case PAE:
 		{
-			/*
+
 			//Page Address Entropy
 			//random selected bits from the page and bank bits
 			//similar to
@@ -183,7 +183,8 @@ void linear_to_raw_address_translation::addrdec_tlx(new_addr_type addr, addrdec_
 			chip[3] = a[11]^a[10]^a[8]^a[3]^b[2]^b[3]^chip[3];
 			chip[4] = a[12]^a[9]^a[8]^a[5]^a[4]^b[1]^b[0]^chip[4];
 			tlx->chip = chip.to_ulong();
-			*/
+
+			/*
 			///////////////////////////////////myedit
 			std::bitset<64> a(tlx->row);
 			std::bitset<5> chip(tlx->chip);
@@ -201,6 +202,7 @@ void linear_to_raw_address_translation::addrdec_tlx(new_addr_type addr, addrdec_
 			}
 			tlx->chip = chip.to_ulong();
 			///////////////////////////////////myedit
+			*/
 			assert(tlx->chip < m_n_channel);
 			break;
 		}
