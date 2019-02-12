@@ -1081,7 +1081,12 @@ void shader_core_ctx::issue_block2core( kernel_info_t &kernel )
     unsigned free_cta_hw_id=(unsigned)-1;
     for (unsigned i=0;i<kernel_max_cta_per_shader;i++ ) {
       if( m_cta_status[i]==0 ) {
+
+    	 /////////myedit
          free_cta_hw_id=i;
+         //free_cta_hw_id=i+kernel_max_cta_per_shader*m_sid;
+         /////////myedit
+
          break;
       }
     }

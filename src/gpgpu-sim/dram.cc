@@ -562,6 +562,8 @@ void dram_t::print( FILE* simFile) const
 	           1 - (float)n_activity_all/n_cmd_all);
 	   fprintf(simFile,"dram_eff_all=%.4g\n",
 	           (float)bwutil_all/n_activity_all);
+	   fprintf(simFile,"bw_util_all=%.4g\n",
+	           (float)bwutil_all/n_cmd_all);
 
 	   ////////////blp & blc
 	   fprintf(simFile,"n_blp_all=%u\n",

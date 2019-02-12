@@ -119,13 +119,13 @@ void get_app_name(){
 		app_name = set_name + "_" + app_name;
 		app_name = config_name + "_" + app_name;
 
-		std::string filename1 = "/sciclone/pscr/hwang07/mapping_results/l1_miss_trace/" + app_name + ".txt";
-		std::string filename2 = "/sciclone/pscr/hwang07/mapping_results/l2_miss_trace/" + app_name + ".txt";
+		//std::string filename1 = "/sciclone/pscr/hwang07/mapping_results/l1_miss_trace/" + app_name + ".txt";
+		//std::string filename2 = "/sciclone/pscr/hwang07/mapping_results/l2_miss_trace/" + app_name + ".txt";
 		std::string filename3 = "/sciclone/pscr/hwang07/mapping_results/l1_miss_count/" + app_name + ".txt";
 		std::string filename4 = "/sciclone/pscr/hwang07/mapping_results/l2_miss_count/" + app_name + ".txt";
 
-		outfile1 = std::fopen(filename1.c_str(), "w");
-		outfile2 = std::fopen(filename2.c_str(), "w");
+		//outfile1 = std::fopen(filename1.c_str(), "w");
+		//outfile2 = std::fopen(filename2.c_str(), "w");
 		outfile3 = std::fopen(filename3.c_str(), "w");
 		outfile4 = std::fopen(filename4.c_str(), "w");
 	}
