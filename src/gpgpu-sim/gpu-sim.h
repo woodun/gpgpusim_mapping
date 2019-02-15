@@ -197,10 +197,26 @@ struct memory_config {
       }
       bk_tag_length = i;
       assert(nbkgrp>0 && "Number of bank groups cannot be zero");
-      tRCDWR = tRCD-(WL+1);
-      tRTW = (CL+(BL/data_command_freq_ratio)+2-WL);
-      tWTR = (WL+(BL/data_command_freq_ratio)+tCDLR); 
-      tWTP = (WL+(BL/data_command_freq_ratio)+tWR);
+
+      //////////////////////////////////////myedit
+//      tRCDWR = tRCD-(WL+1);
+//      tRTW = (CL+(BL/data_command_freq_ratio)+2-WL);
+//      tWTR = (WL+(BL/data_command_freq_ratio)+tCDLR);
+//      tWTP = (WL+(BL/data_command_freq_ratio)+tWR);
+
+      if(tRCD){
+		  tRCDWR = tRCD-(WL+1);
+		  tRTW = (CL+(BL/data_command_freq_ratio)+2-WL);
+		  tWTR = (WL+(BL/data_command_freq_ratio)+tCDLR);
+		  tWTP = (WL+(BL/data_command_freq_ratio)+tWR);
+      }else{
+          tRCDWR = 0;
+          tRTW = 0;
+          tWTR = 0;
+          tWTP = 0;
+      }
+      //////////////////////////////////////myedit
+
       dram_atom_size = BL * busW * gpu_n_mem_per_ctrlr; // burst length x bus width x # chips per partition 
 
       assert( m_n_sub_partition_per_memory_channel > 0 ); 
