@@ -84,7 +84,7 @@ public:
 
    /////////////////myedit
    //const addrdec_t &get_tlx_addr() const { return m_raw_addr; }
-   addrdec_t &get_tlx_addr() const { return m_raw_addr; }
+   addrdec_t &get_tlx_addr(){ return m_raw_addr; }
    /////////////////myedit
 
    unsigned get_data_size() const { return m_data_size; }

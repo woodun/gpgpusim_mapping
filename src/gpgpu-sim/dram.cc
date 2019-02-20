@@ -177,7 +177,10 @@ dram_req_t::dram_req_t( class mem_fetch *mf )
    dqbytes = 0;
    data = mf;
 
-   const addrdec_t &tlx = mf->get_tlx_addr();
+   ///////////////////////myedit
+   //const addrdec_t &tlx = mf->get_tlx_addr();
+   addrdec_t &tlx = mf->get_tlx_addr();
+   ///////////////////////myedit
 
    bk  = tlx.bk; 
    row = tlx.row; 
