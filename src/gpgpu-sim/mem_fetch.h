@@ -82,7 +82,11 @@ public:
 
    void print( FILE *fp, bool print_inst = true ) const;
 
-   const addrdec_t &get_tlx_addr() const { return m_raw_addr; }
+   /////////////////myedit
+   //const addrdec_t &get_tlx_addr() const { return m_raw_addr; }
+   addrdec_t &get_tlx_addr() const { return m_raw_addr; }
+   /////////////////myedit
+
    unsigned get_data_size() const { return m_data_size; }
    void     set_data_size( unsigned size ) { m_data_size=size; }//mymark linesize
    unsigned get_ctrl_size() const { return m_ctrl_size; }
