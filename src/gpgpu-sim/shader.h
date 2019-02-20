@@ -1893,6 +1893,14 @@ private:
     unsigned m_cta_issue_next_core;
     std::list<unsigned> m_core_sim_order;
     std::list<mem_fetch*> m_response_fifo;
+
+    //////////////////myedit
+    unsigned per_core_counter_chip;
+    unsigned per_core_counter_bank;
+    unsigned per_core_counter_row;
+    unsigned per_core_counter_bank_per_channel;
+    unsigned per_core_counter_row_per_bank;
+    //////////////////myedit
 };
 
 class shader_memory_interface : public mem_fetch_interface {

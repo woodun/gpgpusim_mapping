@@ -142,8 +142,6 @@ struct power_config {
 
 };
 
-
-
 struct memory_config {
    memory_config()
    {
@@ -160,8 +158,15 @@ struct memory_config {
          nbkgrp = 1;
          tCCDL = 0;
          tRTPL = 0;
-         sscanf(gpgpu_dram_timing_opt,"%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d",
-                &nbk,&tCCD,&tRRD,&tRCD,&tRAS,&tRP,&tRC,&CL,&WL,&tCDLR,&tWR,&nbkgrp,&tCCDL,&tRTPL);
+
+         //////////////////////myedit
+//         sscanf(gpgpu_dram_timing_opt,"%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d",
+//                &nbk,&tCCD,&tRRD,&tRCD,&tRAS,&tRP,&tRC,&CL,&WL,&tCDLR,&tWR,&nbkgrp,&tCCDL,&tRTPL);
+         sscanf(gpgpu_dram_timing_opt,"%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d",
+                &nbk,&tCCD,&tRRD,&tRCD,&tRAS,&tRP,&tRC,&CL,&WL,&tCDLR,&tWR,&nbkgrp,&tCCDL,&tRTPL,&uniform_access_enabled,&x,&y,&z);
+         //////////////////////myedit
+
+
       } else {
          // named dram timing options (unordered)
          option_parser_t dram_opp = option_parser_create(); 
@@ -183,6 +188,13 @@ struct memory_config {
          option_parser_register(dram_opp, "nbkgrp", OPT_UINT32, &nbkgrp, "number of bank groups", "1"); 
          option_parser_register(dram_opp, "CCDL",   OPT_UINT32, &tCCDL,  "column to column delay between accesses to different bank groups", "0"); 
          option_parser_register(dram_opp, "RTPL",   OPT_UINT32, &tRTPL,  "read to precharge delay between accesses to different bank groups", "0"); 
+
+         //////////////////////myedit
+         option_parser_register(dram_opp, "uniform",   OPT_UINT32, &uniform_access_enabled,  "uniform access enabled?", "0");
+         option_parser_register(dram_opp, "x",   OPT_UINT32, &x,  "this core will evenly send to how many channels?", "0");
+         option_parser_register(dram_opp, "y",   OPT_UINT32, &y,  "this core will evenly send to how many banks?", "0");
+         option_parser_register(dram_opp, "z",   OPT_UINT32, &z,  "this core will consecutively send to the same row how many times?", "0");
+         //////////////////////myedit
 
          option_parser_delimited_string(dram_opp, gpgpu_dram_timing_opt, "=:;"); 
          fprintf(stdout, "DRAM Timing Options:\n"); 
@@ -253,6 +265,13 @@ struct memory_config {
    unsigned dram_latency;
 
    // DRAM parameters
+
+   ///////////////myedit
+   unsigned uniform_access_enabled;
+   unsigned x;///////////////////////this core will evenly send to how many channels?
+   unsigned y;///////////////////////this core will evenly send to how many banks?
+   unsigned z;///////////////////////this core will consecutively send to the same row how many times?
+   ///////////////myedit
 
    unsigned tCCDL;  //column to column delay when bank groups are enabled
    unsigned tRTPL;  //read to precharge delay when bank groups are enabled for GDDR5 this is identical to RTPS, if for other DRAM this is different, you will need to split them in two
