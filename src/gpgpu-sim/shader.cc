@@ -3306,6 +3306,43 @@ void simt_core_cluster::icnt_inject_request_packet(class mem_fetch *mf)
     default: assert(0);
     }
 
+    ////////////////myedit
+    if(mf->get_mem_config()->uniform_access_enabled){
+
+ 	   mf->get_tlx_addr().chip = per_core_counter_chip;
+ 	   mf->get_tlx_addr().bk = m_cluster_id * mf->get_mem_config()->y + per_core_counter_bank_per_channel;
+ 	   mf->get_tlx_addr().row = per_core_counter_row_per_bank;
+
+ 	   per_core_counter_chip++;
+ 	   per_core_counter_bank++;
+ 	   per_core_counter_row++;
+
+ 	   if(per_core_counter_bank >= mf->get_mem_config()->x * mf->get_mem_config()->z){
+ 		   per_core_counter_bank_per_channel++;
+ 		   per_core_counter_bank = 0;
+ 	   }
+ 	   if(per_core_counter_row >= mf->get_mem_config()->x * mf->get_mem_config()->y * mf->get_mem_config()->z){
+ 		   per_core_counter_row_per_bank++;
+ 		   per_core_counter_row = 0;
+ 	   }
+
+ 	   if(per_core_counter_chip >= mf->get_mem_config()->x){
+ 		   per_core_counter_chip = 0;
+ 	   }
+ 	   if(per_core_counter_bank_per_channel >= mf->get_mem_config()->y){
+ 		   per_core_counter_bank_per_channel = 0;
+ 	   }
+ 	   if(per_core_counter_row_per_bank >= 32){
+ 		   per_core_counter_row_per_bank = 0;
+ 	   }
+
+ 	   mf->get_tlx_addr().sub_partition = mf->get_tlx_addr().chip;
+    }
+
+    mf->print_status1(gpu_sim_cycle + gpu_tot_sim_cycle);
+    l1_window_counter[mf->get_channel_id()]++;
+    ////////////////myedit
+
    // The packet size varies depending on the type of request: 
    // - For write request and atomic request, the packet contains the data 
    // - For read request (i.e. not write nor atomic), the packet only has control metadata
@@ -3316,43 +3353,6 @@ void simt_core_cluster::icnt_inject_request_packet(class mem_fetch *mf)
    m_stats->m_outgoing_traffic_stats->record_traffic(mf, packet_size); 
    unsigned destination = mf->get_sub_partition_id();
    mf->set_status(IN_ICNT_TO_MEM,gpu_sim_cycle+gpu_tot_sim_cycle);
-
-   ////////////////myedit
-   if(mf->get_mem_config()->uniform_access_enabled){
-
-	   mf->get_tlx_addr().chip = per_core_counter_chip;
-	   mf->get_tlx_addr().bk = m_cluster_id * mf->get_mem_config()->y + per_core_counter_bank_per_channel;
-	   mf->get_tlx_addr().row = per_core_counter_row_per_bank;
-
-	   per_core_counter_chip++;
-	   per_core_counter_bank++;
-	   per_core_counter_row++;
-
-	   if(per_core_counter_bank >= mf->get_mem_config()->x * mf->get_mem_config()->z){
-		   per_core_counter_bank_per_channel++;
-		   per_core_counter_bank = 0;
-	   }
-	   if(per_core_counter_row >= mf->get_mem_config()->x * mf->get_mem_config()->y * mf->get_mem_config()->z){
-		   per_core_counter_row_per_bank++;
-		   per_core_counter_row = 0;
-	   }
-
-	   if(per_core_counter_chip >= mf->get_mem_config()->x){
-		   per_core_counter_chip = 0;
-	   }
-	   if(per_core_counter_bank_per_channel >= mf->get_mem_config()->y){
-		   per_core_counter_bank_per_channel = 0;
-	   }
-	   if(per_core_counter_row_per_bank >= 32){
-		   per_core_counter_row_per_bank = 0;
-	   }
-
-	   mf->get_tlx_addr().sub_partition = mf->get_tlx_addr().chip;
-   }
-
-   mf->print_status1(gpu_sim_cycle + gpu_tot_sim_cycle);
-   l1_window_counter[mf->get_channel_id()]++;
-   ////////////////myedit
 
    if (!mf->get_is_write() && !mf->isatomic())
       ::icnt_push(m_cluster_id, m_config->mem2device(destination), (void*)mf, mf->get_ctrl_size() );
