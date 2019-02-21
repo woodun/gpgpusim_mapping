@@ -877,6 +877,15 @@ data_cache::wr_miss_wa( new_addr_type addr,
                     mf->get_tpc(),
                     mf->get_mem_config());
 
+
+    ////////////////////myedit
+    if(mf->get_mem_config()->uniform_access_enabled){
+    	n_mf->get_tlx_addr().chip = mf->get_tlx_addr().chip;
+    	n_mf->get_tlx_addr().bk = mf->get_tlx_addr().bk;
+    	n_mf->get_tlx_addr().row = mf->get_tlx_addr().row;
+    }
+    ////////////////////myedit
+
     bool do_miss = false;
     bool wb = false;
     cache_block_t evicted;
