@@ -887,6 +887,7 @@ data_cache::wr_miss_wa( new_addr_type addr,
     	n_mf->get_tlx_addr().chip = mf->get_tlx_addr().chip;
     	n_mf->get_tlx_addr().bk = mf->get_tlx_addr().bk;
     	n_mf->get_tlx_addr().row = mf->get_tlx_addr().row;
+    	n_mf->get_tlx_addr().sub_partition = mf->get_tlx_addr().sub_partition;
     }
     ////////////////////myedit
 
