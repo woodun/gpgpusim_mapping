@@ -143,7 +143,7 @@ struct power_config {
 };
 
 ////////////////////myedit
-extern unsigned uniform_access_enabled_global = 0;
+extern unsigned uniform_access_enabled_global;
 ////////////////////myedit
 
 struct memory_config {
