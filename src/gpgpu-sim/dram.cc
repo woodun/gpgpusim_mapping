@@ -195,7 +195,7 @@ dram_req_t::dram_req_t( class mem_fetch *mf )
 
 void dram_t::push( class mem_fetch *data ) 
 {
-	printf("debug:id:%u, chip:%u\n", id, data->get_tlx_addr().chip);//////////myedit
+	printf("debug:id:%u, chip:%u, sub_partition:%u\n", id, data->get_tlx_addr().chip, data->get_tlx_addr().sub_partition);//////////myedit
 	fflush(stdout);//////////myedit
    assert(id == data->get_tlx_addr().chip); // Ensure request is in correct memory partition
 
