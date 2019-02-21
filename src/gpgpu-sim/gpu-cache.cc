@@ -835,6 +835,10 @@ enum cache_request_status data_cache::wr_hit_global_we_local_wb(new_addr_type ad
 		return wr_hit_wb(addr, cache_index, mf, time, events, status); // Write-back
 }
 
+////////////////////myedit
+unsigned uniform_access_enabled_global = 0;
+////////////////////myedit
+
 /****** Write-miss functions (Set by config file) ******/
 
 /// Write-allocate miss: Send write request to lower level memory
@@ -879,7 +883,7 @@ data_cache::wr_miss_wa( new_addr_type addr,
 
 
     ////////////////////myedit
-    if(mf->get_mem_config()->uniform_access_enabled){
+    if(uniform_access_enabled_global){
     	n_mf->get_tlx_addr().chip = mf->get_tlx_addr().chip;
     	n_mf->get_tlx_addr().bk = mf->get_tlx_addr().bk;
     	n_mf->get_tlx_addr().row = mf->get_tlx_addr().row;

@@ -142,6 +142,10 @@ struct power_config {
 
 };
 
+////////////////////myedit
+extern unsigned uniform_access_enabled_global = 0;
+////////////////////myedit
+
 struct memory_config {
    memory_config()
    {
@@ -201,6 +205,10 @@ struct memory_config {
          option_parser_print(dram_opp, stdout); 
          option_parser_destroy(dram_opp); 
       }
+
+      //////////////////////myedit
+      uniform_access_enabled_global = uniform_access_enabled;
+      //////////////////////myedit
 
       int nbkt = nbk/nbkgrp;
       unsigned i;

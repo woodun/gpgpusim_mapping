@@ -3307,7 +3307,7 @@ void simt_core_cluster::icnt_inject_request_packet(class mem_fetch *mf)
     }
 
     ////////////////myedit
-    if(mf->get_mem_config()->uniform_access_enabled){
+    if(uniform_access_enabled_global){
 
  	   mf->get_tlx_addr().chip = per_core_counter_chip;
  	   mf->get_tlx_addr().bk = m_cluster_id * mf->get_mem_config()->y + per_core_counter_bank_per_channel;
