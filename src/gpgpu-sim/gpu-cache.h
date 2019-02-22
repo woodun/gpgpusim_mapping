@@ -70,7 +70,19 @@ struct cache_block_t {
         m_last_access_time=0;
         m_status=INVALID;
     }
-    void allocate( new_addr_type tag, new_addr_type block_addr, unsigned time )
+
+    //////////////////////myedit
+//    void allocate( new_addr_type tag, new_addr_type block_addr, unsigned time )
+//    {
+//        m_tag=tag;
+//        m_block_addr=block_addr;
+//        m_alloc_time=time;
+//        m_last_access_time=time;
+//        m_fill_time=0;
+//        m_status=RESERVED;
+//    }
+
+    void allocate( new_addr_type tag, new_addr_type block_addr, unsigned time, addrdec_t raw_addr )
     {
         m_tag=tag;
         m_block_addr=block_addr;
@@ -78,7 +90,10 @@ struct cache_block_t {
         m_last_access_time=time;
         m_fill_time=0;
         m_status=RESERVED;
+        m_raw_addr = raw_addr;
     }
+    //////////////////////myedit
+
     void fill( unsigned time )
     {
         assert( m_status == RESERVED );
@@ -92,6 +107,10 @@ struct cache_block_t {
     unsigned         m_last_access_time;
     unsigned         m_fill_time;
     cache_block_state    m_status;
+
+    //////////////////////myedit
+    addrdec_t m_raw_addr;
+    //////////////////////myedit
 };
 
 enum replacement_policy_t {

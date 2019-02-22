@@ -218,16 +218,27 @@ enum cache_request_status tag_array::probe( new_addr_type addr, unsigned &idx ) 
     return MISS;
 }
 
-enum cache_request_status tag_array::access( new_addr_type addr, unsigned time, unsigned &idx )
+////////////////////////////myedit
+//enum cache_request_status tag_array::access( new_addr_type addr, unsigned time, unsigned &idx )
+enum cache_request_status tag_array::access( new_addr_type addr, unsigned time, unsigned &idx, addrdec_t raw_addr)
+////////////////////////////myedit
 {
     bool wb=false;
     cache_block_t evicted;
-    enum cache_request_status result = access(addr,time,idx,wb,evicted);
+
+    ////////////////////////////myedit
+    //enum cache_request_status result = access(addr,time,idx,wb,evicted);
+    enum cache_request_status result = access(addr,time,idx,wb,evicted,raw_addr);
+    ////////////////////////////myedit
+
     assert(!wb);
     return result;
 }
 
-enum cache_request_status tag_array::access( new_addr_type addr, unsigned time, unsigned &idx, bool &wb, cache_block_t &evicted ) 
+////////////////////////////myedit
+//enum cache_request_status tag_array::access( new_addr_type addr, unsigned time, unsigned &idx, bool &wb, cache_block_t &evicted )
+enum cache_request_status tag_array::access( new_addr_type addr, unsigned time, unsigned &idx, bool &wb, cache_block_t &evicted, addrdec_t raw_addr)
+////////////////////////////myedit
 {
     m_access++;
     shader_cache_access_log(m_core_id, m_type_id, 0); // log accesses to cache
@@ -246,7 +257,11 @@ enum cache_request_status tag_array::access( new_addr_type addr, unsigned time, 
                 wb = true;
                 evicted = m_lines[idx];
             }
-            m_lines[idx].allocate( m_config.tag(addr), m_config.block_addr(addr), time );
+
+            ////////////////////////////myedit
+            //m_lines[idx].allocate( m_config.tag(addr), m_config.block_addr(addr), time );
+            m_lines[idx].allocate( m_config.tag(addr), m_config.block_addr(addr), time, raw_addr);
+            ////////////////////////////myedit
         }
         break;
     case RESERVATION_FAIL:
@@ -261,13 +276,21 @@ enum cache_request_status tag_array::access( new_addr_type addr, unsigned time, 
     return status;
 }
 
-void tag_array::fill( new_addr_type addr, unsigned time )
+//////////////////myedit
+//void tag_array::fill( new_addr_type addr, unsigned time )
+void tag_array::fill( new_addr_type addr, unsigned time, addrdec_t raw_addr)
+//////////////////myedit
 {
     assert( m_config.m_alloc_policy == ON_FILL );
     unsigned idx;
     enum cache_request_status status = probe(addr,idx);
     assert(status==MISS); // MSHR should have prevented redundant memory request
-    m_lines[idx].allocate( m_config.tag(addr), m_config.block_addr(addr), time );
+
+    ////////////////////////////myedit
+    //m_lines[idx].allocate( m_config.tag(addr), m_config.block_addr(addr), time );
+    m_lines[idx].allocate( m_config.tag(addr), m_config.block_addr(addr), time, raw_addr);
+    ////////////////////////////myedit
+
     m_lines[idx].fill(time);
 }
 
@@ -701,11 +724,19 @@ void baseline_cache::fill(mem_fetch *mf, unsigned time){
     assert( e != m_extra_mf_fields.end() );
     assert( e->second.m_valid );
     mf->set_data_size( e->second.m_data_size );
-    if ( m_config.m_alloc_policy == ON_MISS )
+    if ( m_config.m_alloc_policy == ON_MISS ){
         m_tag_array->fill(e->second.m_cache_index,time);
-    else if ( m_config.m_alloc_policy == ON_FILL )
-        m_tag_array->fill(e->second.m_block_addr,time);
-    else abort();
+    }
+    else if ( m_config.m_alloc_policy == ON_FILL ){
+
+    	////////////////////////myedit
+        //m_tag_array->fill(e->second.m_block_addr,time);
+        m_tag_array->fill(e->second.m_block_addr,time,mf->get_tlx_addr());
+        ////////////////////////myedit
+    }
+    else{
+    	abort();
+    }
     bool has_atomic = false;
     m_mshrs.mark_ready(e->second.m_block_addr, has_atomic);
     if (has_atomic) {
@@ -750,18 +781,34 @@ void baseline_cache::send_read_request(new_addr_type addr, new_addr_type block_a
     bool mshr_hit = m_mshrs.probe(block_addr);
     bool mshr_avail = !m_mshrs.full(block_addr);
     if ( mshr_hit && mshr_avail ) {
-    	if(read_only)
-    		m_tag_array->access(block_addr,time,cache_index);
-    	else
-    		m_tag_array->access(block_addr,time,cache_index,wb,evicted);
+    	if(read_only){
+    		////////////////////////////myedit
+    		//m_tag_array->access(block_addr,time,cache_index);
+    		m_tag_array->access(block_addr,time,cache_index,mf->get_tlx_addr());
+    		////////////////////////////myedit
+    	}
+    	else{
+    		////////////////////////////myedit
+    		//m_tag_array->access(block_addr,time,cache_index,wb,evicted);
+    		m_tag_array->access(block_addr,time,cache_index,wb,evicted,mf->get_tlx_addr());
+    		////////////////////////////myedit
+    	}
 
         m_mshrs.add(block_addr,mf);
         do_miss = true;
     } else if ( !mshr_hit && mshr_avail && (m_miss_queue.size() < m_config.m_miss_queue_size) ) {
-    	if(read_only)
-    		m_tag_array->access(block_addr,time,cache_index);
-    	else
-    		m_tag_array->access(block_addr,time,cache_index,wb,evicted);
+    	if(read_only){
+    		////////////////////////////myedit
+    		//m_tag_array->access(block_addr,time,cache_index);
+    		m_tag_array->access(block_addr,time,cache_index,mf->get_tlx_addr());
+    		////////////////////////////myedit
+    	}
+    	else{
+    		////////////////////////////myedit
+    		//m_tag_array->access(block_addr,time,cache_index,wb,evicted);
+    		m_tag_array->access(block_addr,time,cache_index,wb,evicted,mf->get_tlx_addr());
+    		////////////////////////////myedit
+    	}
 
         m_mshrs.add(block_addr,mf);
         m_extra_mf_fields[mf] = extra_mf_fields(block_addr,cache_index, mf->get_data_size());
@@ -788,7 +835,12 @@ void data_cache::send_write_request(mem_fetch *mf, cache_event request, unsigned
 /// Write-back hit: Mark block as modified
 cache_request_status data_cache::wr_hit_wb(new_addr_type addr, unsigned cache_index, mem_fetch *mf, unsigned time, std::list<cache_event> &events, enum cache_request_status status ){
 	new_addr_type block_addr = m_config.block_addr(addr);
-	m_tag_array->access(block_addr,time,cache_index); // update LRU state
+
+	///////////////////////myedit
+	//m_tag_array->access(block_addr,time,cache_index); // update LRU state
+	m_tag_array->access(block_addr,time,cache_index,mf->get_tlx_addr()); // update LRU state
+	///////////////////////myedit
+
 	cache_block_t &block = m_tag_array->get_block(cache_index);
 	block.m_status = MODIFIED;
 
@@ -801,7 +853,12 @@ cache_request_status data_cache::wr_hit_wt(new_addr_type addr, unsigned cache_in
 		return RESERVATION_FAIL; // cannot handle request this cycle
 
 	new_addr_type block_addr = m_config.block_addr(addr);
-	m_tag_array->access(block_addr,time,cache_index); // update LRU state
+
+	///////////////////////myedit
+	//m_tag_array->access(block_addr,time,cache_index); // update LRU state
+	m_tag_array->access(block_addr,time,cache_index,mf->get_tlx_addr()); // update LRU state
+	///////////////////////myedit
+
 	cache_block_t &block = m_tag_array->get_block(cache_index);
 	block.m_status = MODIFIED;
 
@@ -907,6 +964,10 @@ data_cache::wr_miss_wa( new_addr_type addr,
                 m_wrbk_type,m_config.get_line_sz(),true);
             m_miss_queue.push_back(wb);
             wb->set_status(m_miss_queue_status,time);
+
+            //////////////////////myedit
+            wb->get_tlx_addr() = evicted.m_raw_addr;
+			//////////////////////myedit
         }
         return MISS;
     }
@@ -945,7 +1006,12 @@ data_cache::rd_hit_base( new_addr_type addr,
                          enum cache_request_status status )
 {
     new_addr_type block_addr = m_config.block_addr(addr);
-    m_tag_array->access(block_addr,time,cache_index);
+
+    ///////////////////////////myedit
+    //m_tag_array->access(block_addr,time,cache_index);
+    m_tag_array->access(block_addr,time,cache_index,mf->get_tlx_addr());
+	///////////////////////////myedit
+
     // Atomics treated as global read/write requests - Perform read, mark line as
     // MODIFIED
     if(mf->isatomic()){ 
@@ -987,8 +1053,12 @@ data_cache::rd_miss_base( new_addr_type addr,
         if(wb && (m_config.m_write_policy != WRITE_THROUGH) ){ 
             mem_fetch *wb = m_memfetch_creator->alloc(evicted.m_block_addr,
                 m_wrbk_type,m_config.get_line_sz(),true);
-        send_write_request(wb, WRITE_BACK_REQUEST_SENT, time, events);
-    }
+            send_write_request(wb, WRITE_BACK_REQUEST_SENT, time, events);
+
+            //////////////////////myedit
+            wb->get_tlx_addr() = evicted.m_raw_addr;
+			//////////////////////myedit
+        }
         return MISS;
     }
     return RESERVATION_FAIL;
@@ -1011,7 +1081,12 @@ read_only_cache::access( new_addr_type addr,
     enum cache_request_status cache_status = RESERVATION_FAIL;
 
     if ( status == HIT ) {
-        cache_status = m_tag_array->access(block_addr,time,cache_index); // update LRU state
+
+    	////////////////////myedit
+    	cache_status = m_tag_array->access(block_addr,time,cache_index); // update LRU state
+        cache_status = m_tag_array->access(block_addr,time,cache_index,mf->get_tlx_addr()); // update LRU state
+		////////////////////myedit
+
     }else if ( status != RESERVATION_FAIL ) {
         if(!miss_queue_full(0)){
             bool do_miss=false;
