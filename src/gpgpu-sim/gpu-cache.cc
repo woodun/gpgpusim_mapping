@@ -1213,7 +1213,12 @@ enum cache_request_status tex_cache::access( new_addr_type addr, mem_fetch *mf,
     // at this point, we will accept the request : access tags and immediately allocate line
     new_addr_type block_addr = m_config.block_addr(addr);
     unsigned cache_index = (unsigned)-1;
-    enum cache_request_status status = m_tags.access(block_addr,time,cache_index);
+
+    //////////////////myedit
+    //enum cache_request_status status = m_tags.access(block_addr,time,cache_index);
+    enum cache_request_status status = m_tags.access(block_addr,time,cache_index, mf->get_tlx_addr());
+    //////////////////myedit
+
     enum cache_request_status cache_status = RESERVATION_FAIL;
     assert( status != RESERVATION_FAIL );
     assert( status != HIT_RESERVED ); // as far as tags are concerned: HIT or MISS
