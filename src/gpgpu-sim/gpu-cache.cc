@@ -220,7 +220,7 @@ enum cache_request_status tag_array::probe( new_addr_type addr, unsigned &idx ) 
 
 ////////////////////////////myedit
 //enum cache_request_status tag_array::access( new_addr_type addr, unsigned time, unsigned &idx )
-enum cache_request_status tag_array::access( new_addr_type addr, unsigned time, unsigned &idx, addrdec_t raw_addr)
+enum cache_request_status tag_array::access( new_addr_type addr, unsigned time, unsigned &idx, addrdec_t raw_addr )
 ////////////////////////////myedit
 {
     bool wb=false;
@@ -237,7 +237,7 @@ enum cache_request_status tag_array::access( new_addr_type addr, unsigned time, 
 
 ////////////////////////////myedit
 //enum cache_request_status tag_array::access( new_addr_type addr, unsigned time, unsigned &idx, bool &wb, cache_block_t &evicted )
-enum cache_request_status tag_array::access( new_addr_type addr, unsigned time, unsigned &idx, bool &wb, cache_block_t &evicted, addrdec_t raw_addr)
+enum cache_request_status tag_array::access( new_addr_type addr, unsigned time, unsigned &idx, bool &wb, cache_block_t &evicted, addrdec_t raw_addr )
 ////////////////////////////myedit
 {
     m_access++;
