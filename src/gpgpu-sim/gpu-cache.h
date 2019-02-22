@@ -371,9 +371,10 @@ public:
     enum cache_request_status access( new_addr_type addr, unsigned time, unsigned &idx, addrdec_t raw_addr );
     //enum cache_request_status access( new_addr_type addr, unsigned time, unsigned &idx, bool &wb, cache_block_t &evicted );
     enum cache_request_status access( new_addr_type addr, unsigned time, unsigned &idx, bool &wb, cache_block_t &evicted, addrdec_t raw_addr );
+    //void fill( new_addr_type addr, unsigned time );
+    void fill( new_addr_type addr, unsigned time, addrdec_t raw_addr );
     ////////////////////////////myedit
 
-    void fill( new_addr_type addr, unsigned time );
     void fill( unsigned idx, unsigned time );
 
     unsigned size() const { return m_config.get_num_lines();}
