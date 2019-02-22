@@ -1083,7 +1083,7 @@ read_only_cache::access( new_addr_type addr,
     if ( status == HIT ) {
 
     	////////////////////myedit
-    	cache_status = m_tag_array->access(block_addr,time,cache_index); // update LRU state
+    	//cache_status = m_tag_array->access(block_addr,time,cache_index); // update LRU state
         cache_status = m_tag_array->access(block_addr,time,cache_index,mf->get_tlx_addr()); // update LRU state
 		////////////////////myedit
 
