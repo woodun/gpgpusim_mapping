@@ -3284,6 +3284,12 @@ bool simt_core_cluster::icnt_injection_buffer_full(unsigned size, bool write)
 
 ////////////////myedit
 unsigned l1_window_counter[32];
+
+unsigned overall_counter_chip = 0;
+unsigned overall_counter_bank = 0;
+unsigned overall_counter_row = 0;
+unsigned overall_counter_bank_per_channel = 0;
+unsigned overall_counter_row_per_bank = 0;
 ////////////////myedit
 
 void simt_core_cluster::icnt_inject_request_packet(class mem_fetch *mf)
@@ -3307,7 +3313,7 @@ void simt_core_cluster::icnt_inject_request_packet(class mem_fetch *mf)
     }
 
     ////////////////myedit
-    if(uniform_access_enabled_global){
+    if(uniform_access_enabled_global == 1){
 
  	   mf->get_tlx_addr().chip = per_core_counter_chip;
  	   mf->get_tlx_addr().bk = m_cluster_id * mf->get_mem_config()->y + per_core_counter_bank_per_channel;
@@ -3337,6 +3343,43 @@ void simt_core_cluster::icnt_inject_request_packet(class mem_fetch *mf)
  	   }
 
  	   mf->get_tlx_addr().sub_partition = mf->get_tlx_addr().chip;
+
+    }else if(uniform_access_enabled_global == 2){
+
+    	unsigned overall_counter_chip;
+    	unsigned overall_counter_bank;
+    	unsigned overall_counter_row;
+    	unsigned overall_counter_bank_per_channel;
+    	unsigned overall_counter_row_per_bank;
+
+  	   mf->get_tlx_addr().chip = overall_counter_chip;
+  	   mf->get_tlx_addr().bk = overall_counter_bank_per_channel;
+  	   mf->get_tlx_addr().row = overall_counter_row_per_bank;
+
+  	   overall_counter_chip++;
+  	   overall_counter_bank++;
+  	   overall_counter_row++;
+
+  	   if(overall_counter_bank >= mf->get_mem_config()->x * mf->get_mem_config()->z){
+  		 overall_counter_bank_per_channel++;
+  		 overall_counter_bank = 0;
+  	   }
+  	   if(overall_counter_row >= mf->get_mem_config()->x * mf->get_mem_config()->y * mf->get_mem_config()->z){
+  		   overall_counter_row_per_bank++;
+  		   overall_counter_row = 0;
+  	   }
+
+  	   if(overall_counter_chip >= mf->get_mem_config()->x){
+  		   overall_counter_chip = 0;
+  	   }
+  	   if(overall_counter_bank_per_channel >= mf->get_mem_config()->y){
+  		   overall_counter_bank_per_channel = 0;
+  	   }
+  	   if(overall_counter_row_per_bank >= 32){
+  		   overall_counter_row_per_bank = 0;
+  	   }
+
+  	   mf->get_tlx_addr().sub_partition = mf->get_tlx_addr().chip;
     }
 
     mf->print_status1(gpu_sim_cycle + gpu_tot_sim_cycle);
