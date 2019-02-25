@@ -3346,12 +3346,6 @@ void simt_core_cluster::icnt_inject_request_packet(class mem_fetch *mf)
 
     }else if(uniform_access_enabled_global == 2){
 
-    	unsigned overall_counter_chip;
-    	unsigned overall_counter_bank;
-    	unsigned overall_counter_row;
-    	unsigned overall_counter_bank_per_channel;
-    	unsigned overall_counter_row_per_bank;
-
   	   mf->get_tlx_addr().chip = overall_counter_chip;
   	   mf->get_tlx_addr().bk = overall_counter_bank_per_channel;
   	   mf->get_tlx_addr().row = overall_counter_row_per_bank;
