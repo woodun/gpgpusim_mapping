@@ -3376,36 +3376,6 @@ void simt_core_cluster::icnt_inject_request_packet(class mem_fetch *mf)
   	   mf->get_tlx_addr().sub_partition = mf->get_tlx_addr().chip;
     }else if(uniform_access_enabled_global == 3){
 
-    	mf->get_tlx_addr().chip = per_core_counter_chip;
-	   mf->get_tlx_addr().bk = m_cluster_id * mf->get_mem_config()->y + per_core_counter_bank_per_channel;
-	   mf->get_tlx_addr().row = per_core_counter_row_per_bank;
-
-	   per_core_counter_chip++;
-	   per_core_counter_bank++;
-	   per_core_counter_row++;
-
-	   if(per_core_counter_bank >= mf->get_mem_config()->x){
-		   per_core_counter_bank_per_channel++;
-		   per_core_counter_bank = 0;
-	   }
-	   if(per_core_counter_row >= mf->get_mem_config()->x * mf->get_mem_config()->y * mf->get_mem_config()->z){
-		   per_core_counter_row_per_bank++;
-		   per_core_counter_row = 0;
-	   }
-
-	   if(per_core_counter_chip >= mf->get_mem_config()->x){
-		   per_core_counter_chip = 0;
-	   }
-	   if(per_core_counter_bank_per_channel >= mf->get_mem_config()->y){
-		   per_core_counter_bank_per_channel = 0;
-	   }
-	   if(per_core_counter_row_per_bank >= 32){
-		   per_core_counter_row_per_bank = 0;
-	   }
-
-	   mf->get_tlx_addr().sub_partition = mf->get_tlx_addr().chip;
-     }else if(uniform_access_enabled_global == 4){
-
     	   mf->get_tlx_addr().chip = overall_counter_chip;
     	   mf->get_tlx_addr().bk = overall_counter_bank_per_channel;
     	   mf->get_tlx_addr().row = overall_counter_row_per_bank;
