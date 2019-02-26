@@ -3404,7 +3404,7 @@ void simt_core_cluster::icnt_inject_request_packet(class mem_fetch *mf)
     	   }
 
     	   mf->get_tlx_addr().sub_partition = mf->get_tlx_addr().chip;
-      }
+    }
 
     mf->print_status1(gpu_sim_cycle + gpu_tot_sim_cycle);
     l1_window_counter[mf->get_channel_id()]++;
