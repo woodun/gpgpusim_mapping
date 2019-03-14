@@ -3404,6 +3404,8 @@ void simt_core_cluster::icnt_inject_request_packet(class mem_fetch *mf)
     	   }
 
     	   mf->get_tlx_addr().sub_partition = mf->get_tlx_addr().chip;
+    }else if(uniform_access_enabled_global == 9){
+    	///S-BOX vs. S-BOX + P-BOX vs. MAPPING TABLE
     }
 
     mf->print_status1(gpu_sim_cycle + gpu_tot_sim_cycle);

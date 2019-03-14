@@ -212,6 +212,7 @@ void linear_to_raw_address_translation::addrdec_tlx(new_addr_type addr, addrdec_
 				b[1] = a[14]^a[13]^a[12]^a[11]^a[10]^a[7]^a[6]^a[4]^a[1]^b[1];
 				b[2] = a[14]^a[10]^a[9]^a[8]^a[7]^a[6]^a[3]^a[2]^a[0]^b[2];
 				b[3] = a[11]^a[10]^a[9]^a[8]^a[7]^a[4]^a[3]^a[1]^b[3];
+				b[4] = a[12]^a[11]^a[10]^a[9]^a[8]^a[5]^a[4]^a[2]^b[4];
 				tlx->bk = b.to_ulong();
 				break;
 			}
@@ -229,6 +230,7 @@ void linear_to_raw_address_translation::addrdec_tlx(new_addr_type addr, addrdec_
 				b[1] = a[14]^a[13]^a[12]^a[11]^a[10]^a[7]^a[6]^a[4]^a[1]^b[1];
 				b[2] = a[14]^a[10]^a[9]^a[8]^a[7]^a[6]^a[3]^a[2]^a[0]^b[2];
 				b[3] = a[11]^a[10]^a[9]^a[8]^a[7]^a[4]^a[3]^a[1]^b[3];
+				b[4] = a[12]^a[11]^a[10]^a[9]^a[8]^a[5]^a[4]^a[2]^b[4];
 				tlx->bk = b.to_ulong();
 				break;
 			}
@@ -249,28 +251,103 @@ void linear_to_raw_address_translation::addrdec_tlx(new_addr_type addr, addrdec_
 				std::bitset<4> b(tlx->bk);
 				chip[0] = a[11]^a[10]^a[6]^a[1]^b[0]^b[1]^chip[0];
 				chip[1] = a[10]^a[5]^a[0]^b[3]^b[1]^chip[1];
-				chip[2] = a[10]^a[9]^a[8]^a[3]^b[2]^chip[2];
+				chip[2] = a[10]^a[9]^a[8]^a[3]^b[0]^chip[2];
 				tlx->chip = chip.to_ulong();
 				break;
 			}
 		case CUSTOM8:
 			{
+				assert(!gap);
+				tlx->chip = (tlx->chip) ^ (tlx->row & (m_n_channel-1));
+				tlx->bk = (tlx->bk) ^ (tlx->row & (32-1));///////////////////////////caution 32 banks only
+				assert(tlx->chip < m_n_channel);
 				break;
 			}
 		case CUSTOM9:
 			{
+				assert(!gap);
+				tlx->bk = (tlx->bk) ^ (tlx->row & (32-1));///////////////////////////caution 32 banks only
+				assert(tlx->chip < m_n_channel);
 				break;
 			}
 		case CUSTOM10:
 			{
+				std::bitset<64> a(tlx->row);
+				std::bitset<5> chip(tlx->chip);
+				std::bitset<4> b(tlx->bk);
+				std::bitset<4> c(tlx->col);
+				chip[0] = a[13]^a[10]^a[9]^a[5]^a[0]^b[3]^b[0]^c[1]^chip[0];
+				chip[1] = a[12]^a[11]^a[6]^a[1]^b[3]^b[2]^b[1]^c[2]^chip[1];
+				chip[2] = a[14]^a[9]^a[8]^a[7]^a[2]^b[1]^c[0]^chip[2];
+				tlx->chip = chip.to_ulong();
+
+				b[0] = a[13]^a[12]^a[11]^a[10]^a[9]^a[6]^a[5]^a[3]^a[0]^c[1]^b[0];
+				b[1] = a[14]^a[13]^a[12]^a[11]^a[10]^a[7]^a[6]^a[4]^a[1]^c[2]^b[1];
+				b[2] = a[14]^a[10]^a[9]^a[8]^a[7]^a[6]^a[3]^a[2]^a[0]^c[0]^c[4]^b[2];
+				b[3] = a[11]^a[10]^a[9]^a[8]^a[7]^a[4]^a[3]^a[1]^c[1]^c[5]^b[3];
+				b[4] = a[12]^a[11]^a[10]^a[9]^a[8]^a[5]^a[4]^a[2]^c[0]^b[4];
+				tlx->bk = b.to_ulong();
 				break;
 			}
 		case CUSTOM11:
 			{
+				std::bitset<64> a(tlx->row);
+				std::bitset<5> chip(tlx->chip);
+				std::bitset<4> b(tlx->bk);
+				std::bitset<4> c(tlx->col);
+				chip[0] = a[13]^a[10]^a[9]^a[5]^a[0]^b[3]^b[0]^c[1]^chip[0];
+				chip[1] = a[12]^a[11]^a[6]^a[1]^b[3]^b[2]^b[1]^c[2]^chip[1];
+				chip[2] = a[14]^a[9]^a[8]^a[7]^a[2]^b[1]^c[0]^chip[2];
+				tlx->chip = chip.to_ulong();
 				break;
 			}
 		case CUSTOM12:
 			{
+				std::bitset<64> a(tlx->row);
+				std::bitset<5> chip(tlx->chip);
+				std::bitset<4> b(tlx->bk);
+				std::bitset<4> c(tlx->col);
+				b[0] = a[13]^a[12]^a[11]^a[10]^a[9]^a[6]^a[5]^a[3]^a[0]^c[1]^b[0];
+				b[1] = a[14]^a[13]^a[12]^a[11]^a[10]^a[7]^a[6]^a[4]^a[1]^c[2]^b[1];
+				b[2] = a[14]^a[10]^a[9]^a[8]^a[7]^a[6]^a[3]^a[2]^a[0]^c[0]^c[4]^b[2];
+				b[3] = a[11]^a[10]^a[9]^a[8]^a[7]^a[4]^a[3]^a[1]^c[1]^c[5]^b[3];
+				b[4] = a[12]^a[11]^a[10]^a[9]^a[8]^a[5]^a[4]^a[2]^c[0]^b[4];
+				tlx->bk = b.to_ulong();
+				break;
+			}
+		case CUSTOM13:
+			{
+				assert(!gap);
+				tlx->chip = (tlx->chip) ^ (tlx->col & (m_n_channel-1));
+				tlx->bk = (tlx->bk) ^ (tlx->col & (32-1));///////////////////////////caution 32 banks only
+				assert(tlx->chip < m_n_channel);
+				break;
+			}
+		case CUSTOM14:
+			{
+				assert(!gap);
+				tlx->chip = (tlx->chip) ^ (tlx->col & (m_n_channel-1));
+				assert(tlx->chip < m_n_channel);
+				break;
+			}
+		case CUSTOM15:
+			{
+				assert(!gap);
+				tlx->bk = (tlx->bk) ^ (tlx->col & (32-1));///////////////////////////caution 32 banks only
+				assert(tlx->chip < m_n_channel);
+				break;
+			}
+		case CUSTOM16:
+			{
+				break;
+			}
+		case CUSTOM17:
+			{///////////////////are channel and bank bits evenly distributed in PAE, FAE and ALL when xoring with row bits? How can we make it more evenly distributed? (by xoring its own bits or something else?)
+				/////////////(see the true value table of current mapping to see if it is evenly distributed?) (get cooked addresses for channel 0 or channel 0, bank 0?)
+				////////(an extra layer of mapping? in that case, maybe RSA is still useful?) (xoring vs mapping table vs RSA which is more even?)
+				////////(questions: 1.how can we get enough spread? from which bits? 2. if we split same row to different channels, can we also put different rows into the same row if they are concurrent?)
+				///////(3. For the same row and same channel, when to put them in the same bank? when to split them into different banks?)
+				////(bfloat truncating? mem scheduling & cache policy? what's its correlation with mapping policy?)
 				break;
 			}
 		default:
