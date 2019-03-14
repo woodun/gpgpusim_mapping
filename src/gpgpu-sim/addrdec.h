@@ -49,7 +49,15 @@ enum partition_index_function{
 	CUSTOM9,
 	CUSTOM10,
 	CUSTOM11,
-	CUSTOM12
+	CUSTOM12,
+	CUSTOM13,
+	CUSTOM14,
+	CUSTOM15,
+	CUSTOM16,
+	CUSTOM17,
+	CUSTOM18,
+	CUSTOM19,
+	CUSTOM20
 };
 ////////////////myedit from future
 
