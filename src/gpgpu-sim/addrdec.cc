@@ -187,7 +187,7 @@ void linear_to_raw_address_translation::addrdec_tlx(new_addr_type addr, addrdec_
 			///////////////////////////////////myedit
 			std::bitset<64> a(tlx->row);
 			std::bitset<5> chip(tlx->chip);
-			std::bitset<4> b(tlx->bk);
+			std::bitset<5> b(tlx->bk);
 			if(m_n_channel >= 8){
 				chip[0] = a[13]^a[10]^a[9]^a[5]^a[0]^b[3]^b[0]^chip[0];
 				chip[1] = a[12]^a[11]^a[6]^a[1]^b[3]^b[2]^b[1]^chip[1];
@@ -207,7 +207,7 @@ void linear_to_raw_address_translation::addrdec_tlx(new_addr_type addr, addrdec_
 		case CUSTOM4:
 			{
 				std::bitset<64> a(tlx->row);
-				std::bitset<4> b(tlx->bk);
+				std::bitset<5> b(tlx->bk);
 				b[0] = a[13]^a[12]^a[11]^a[10]^a[9]^a[6]^a[5]^a[3]^a[0]^b[0];
 				b[1] = a[14]^a[13]^a[12]^a[11]^a[10]^a[7]^a[6]^a[4]^a[1]^b[1];
 				b[2] = a[14]^a[10]^a[9]^a[8]^a[7]^a[6]^a[3]^a[2]^a[0]^b[2];
@@ -220,7 +220,7 @@ void linear_to_raw_address_translation::addrdec_tlx(new_addr_type addr, addrdec_
 			{
 				std::bitset<64> a(tlx->row);
 				std::bitset<5> chip(tlx->chip);
-				std::bitset<4> b(tlx->bk);
+				std::bitset<5> b(tlx->bk);
 				chip[0] = a[13]^a[10]^a[9]^a[5]^a[0]^b[3]^b[0]^chip[0];
 				chip[1] = a[12]^a[11]^a[6]^a[1]^b[3]^b[2]^b[1]^chip[1];
 				chip[2] = a[14]^a[9]^a[8]^a[7]^a[2]^b[1]^chip[2];
@@ -234,7 +234,7 @@ void linear_to_raw_address_translation::addrdec_tlx(new_addr_type addr, addrdec_
 				tlx->bk = b.to_ulong();
 				break;
 			}
-		case CUSTOM6:
+		case CUSTOM6: /////////simplified IPOLY
 			{
 				std::bitset<64> a(tlx->row);
 				std::bitset<5> chip(tlx->chip);
@@ -244,18 +244,18 @@ void linear_to_raw_address_translation::addrdec_tlx(new_addr_type addr, addrdec_
 				tlx->chip = chip.to_ulong();
 				break;
 			}
-		case CUSTOM7:
+		case CUSTOM7: /////////simplified PAE
 			{
 				std::bitset<64> a(tlx->row);
 				std::bitset<5> chip(tlx->chip);
-				std::bitset<4> b(tlx->bk);
+				std::bitset<5> b(tlx->bk);
 				chip[0] = a[11]^a[10]^a[6]^a[1]^b[0]^b[1]^chip[0];
 				chip[1] = a[10]^a[5]^a[0]^b[3]^b[1]^chip[1];
 				chip[2] = a[10]^a[9]^a[8]^a[3]^b[0]^chip[2];
 				tlx->chip = chip.to_ulong();
 				break;
 			}
-		case CUSTOM8:
+		case CUSTOM8: /////////BK & CN PERMUTATION
 			{
 				assert(!gap);
 				tlx->chip = (tlx->chip) ^ (tlx->row & (m_n_channel-1));
@@ -263,19 +263,19 @@ void linear_to_raw_address_translation::addrdec_tlx(new_addr_type addr, addrdec_
 				assert(tlx->chip < m_n_channel);
 				break;
 			}
-		case CUSTOM9:
+		case CUSTOM9: /////////BK PERMUTATION ONLY
 			{
 				assert(!gap);
 				tlx->bk = (tlx->bk) ^ (tlx->row & (32-1));///////////////////////////caution 32 banks only
 				assert(tlx->chip < m_n_channel);
 				break;
 			}
-		case CUSTOM10:
+		case CUSTOM10: /////////COLUMN BITS ADDED ON BK & CN
 			{
 				std::bitset<64> a(tlx->row);
 				std::bitset<5> chip(tlx->chip);
-				std::bitset<4> b(tlx->bk);
-				std::bitset<4> c(tlx->col);
+				std::bitset<5> b(tlx->bk);
+				std::bitset<64> c(tlx->col);
 				chip[0] = a[13]^a[10]^a[9]^a[5]^a[0]^b[3]^b[0]^c[1]^chip[0];
 				chip[1] = a[12]^a[11]^a[6]^a[1]^b[3]^b[2]^b[1]^c[2]^chip[1];
 				chip[2] = a[14]^a[9]^a[8]^a[7]^a[2]^b[1]^c[0]^chip[2];
@@ -289,24 +289,24 @@ void linear_to_raw_address_translation::addrdec_tlx(new_addr_type addr, addrdec_
 				tlx->bk = b.to_ulong();
 				break;
 			}
-		case CUSTOM11:
+		case CUSTOM11: /////////COLUMN BITS ADDED ON CN ONLY
 			{
 				std::bitset<64> a(tlx->row);
 				std::bitset<5> chip(tlx->chip);
-				std::bitset<4> b(tlx->bk);
-				std::bitset<4> c(tlx->col);
+				std::bitset<5> b(tlx->bk);
+				std::bitset<64> c(tlx->col);
 				chip[0] = a[13]^a[10]^a[9]^a[5]^a[0]^b[3]^b[0]^c[1]^chip[0];
 				chip[1] = a[12]^a[11]^a[6]^a[1]^b[3]^b[2]^b[1]^c[2]^chip[1];
 				chip[2] = a[14]^a[9]^a[8]^a[7]^a[2]^b[1]^c[0]^chip[2];
 				tlx->chip = chip.to_ulong();
 				break;
 			}
-		case CUSTOM12:
+		case CUSTOM12: /////////COLUMN BITS ADDED ON BK ONLY
 			{
 				std::bitset<64> a(tlx->row);
 				std::bitset<5> chip(tlx->chip);
-				std::bitset<4> b(tlx->bk);
-				std::bitset<4> c(tlx->col);
+				std::bitset<5> b(tlx->bk);
+				std::bitset<64> c(tlx->col);
 				b[0] = a[13]^a[12]^a[11]^a[10]^a[9]^a[6]^a[5]^a[3]^a[0]^c[1]^b[0];
 				b[1] = a[14]^a[13]^a[12]^a[11]^a[10]^a[7]^a[6]^a[4]^a[1]^c[2]^b[1];
 				b[2] = a[14]^a[10]^a[9]^a[8]^a[7]^a[6]^a[3]^a[2]^a[0]^c[0]^c[4]^b[2];
@@ -315,7 +315,7 @@ void linear_to_raw_address_translation::addrdec_tlx(new_addr_type addr, addrdec_
 				tlx->bk = b.to_ulong();
 				break;
 			}
-		case CUSTOM13:
+		case CUSTOM13://///////BK & CN PERMUTATION
 			{
 				assert(!gap);
 				tlx->chip = (tlx->chip) ^ (tlx->col & (m_n_channel-1));
@@ -323,14 +323,14 @@ void linear_to_raw_address_translation::addrdec_tlx(new_addr_type addr, addrdec_
 				assert(tlx->chip < m_n_channel);
 				break;
 			}
-		case CUSTOM14:
+		case CUSTOM14://///////CN PERMUTATION ONLY
 			{
 				assert(!gap);
 				tlx->chip = (tlx->chip) ^ (tlx->col & (m_n_channel-1));
 				assert(tlx->chip < m_n_channel);
 				break;
 			}
-		case CUSTOM15:
+		case CUSTOM15://///////BK PERMUTATION ONLY
 			{
 				assert(!gap);
 				tlx->bk = (tlx->bk) ^ (tlx->col & (32-1));///////////////////////////caution 32 banks only
@@ -347,7 +347,36 @@ void linear_to_raw_address_translation::addrdec_tlx(new_addr_type addr, addrdec_
 				////////(an extra layer of mapping? in that case, maybe RSA is still useful?) (xoring vs mapping table vs RSA which is more even?)
 				////////(questions: 1.how can we get enough spread? from which bits? 2. if we split same row to different channels, can we also put different rows into the same row if they are concurrent?)
 				///////(3. For the same row and same channel, when to put them in the same bank? when to split them into different banks?)
-				////(bfloat truncating? mem scheduling & cache policy? what's its correlation with mapping policy?)
+				////(bfloat truncating? mem scheduling & cache policy? what's its correlation with mapping policy?) (what is the cache policy with compression?)
+				////(why the hell column bits are not changing? print and see.)
+				/////(how many cache writes are read again? if not, perform a non-read cache write on write-miss?)
+				/////(or prioritize the approximation on write-miss reads?)
+				/////(question: in what granularity do gpu write to l2 cahces when l1 misses?)
+				////////bfloat: 1. static is straight forward, it uses the window bw as the estimation for the bw of the next window or reprofiling window and compare with the threshold_bw
+				/////2. dynamic decide theshold_bw with coverage or bw from the previous window, however these two are similar, so only bw is needed.
+				/////we can use a baseline bw to set the threshold_bw for the entire reprofiling window.
+				/////3. the best choice of the input variable may be the pending length, as this status is available and updated every cycle. It is more fine-grained.
+				/////we should draw its overtime figure and check its relationship with bwutil overtime. We should consider pending_length related schemes. (see previous lmc schemes to start with)
+				/////threshold_bw go up to 32 directly, go down in 1,2,3,4,5 or 1,3,5,7 step length. action decided by both coverage and temp_coverage.
+				/////1. coverage filled, go up 2. coverage unfilled && temp_coverage unfilled, go down 3. coverage unfilled && temp_coverage filled, keep
+				/////relaunch scope with updated code? yes, if still no error, copy application_modified and change the input
+				/////consider a backup from pscr?
+				/////1. change burst length and use fp8? (truncate the exp bits as well?) 2. design new format that can be cut into fp16 and fp8? (have sign bit for exp bits? can check ieee standard first)
+				/////3. setting a low error threshold? 4. using different ranges of data and see their error? 5. also using different ranges of random data and run 10 times to see their error?
+				///// do pre-processing to determine if the float data is suitable to be truncated or not? 1. We can store the profiling info within each dram row and keep a 4b buffer for each bank at mc.
+
+				///// *******************non-obsolete notes are marked with * (dec12 2019):
+				///// *2. can we have a low overhead mask to identify the relative error? Or is precise relative error calculation for writes affordable? (multiplier maybe not expensive, what about delay?)
+				///// *3. limit the coverage with per load relative error instead of coverage value?
+				///// *4. append the 4b meta data per row at the end (4k + 4b) or use the last cache line to store (500mb of 16gb)?
+				///// *is the meta data also tranmitted on the bus? will it influence the bit toggles?
+
+				///// options to try for exp1: 1. normal vs uniform distribution. 2. int vs float vs new float data type. 3. float in float vs int in float. 4. different range of data with min equal 0
+				///// 5. different range of data with median equal 0. 6. different range of data with min equal x.
+				///// exp1: should be two sides, uniform distribution, full range (not selected range like +-(10000, 100000) or +-[2^4, 2^5]).
+				///// (In fact, in terms of 2's power, selected range and full range are the same.)
+				///// is exp1.cpp reading the e+xx powers correctly? change to python to generate directly on vortex.
+
 				break;
 			}
 		default:
